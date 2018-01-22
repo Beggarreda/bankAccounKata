@@ -50,8 +50,15 @@ private AccountRepository accountRepository;
 
 	@Override
 	public Account updateAccount_when_withdraw(OperationRequest operationRequest) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		Account account = accountRepository.findOne(operationRequest.getAccountNumber());
+		 if(account == null)
+	            throw new AccountNotFoundException("Account Not Found");
+		 else if(operationRequest.getAmount() > account.getBalance() )
+			 throw new AmountNotValidException("Not Valid Amount ");
+		 
+		 account.setBalance(account.getBalance() - operationRequest.getAmount());
+
+	        return accountRepository.save(account);
+	    }
 
 }
