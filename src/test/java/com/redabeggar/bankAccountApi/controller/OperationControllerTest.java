@@ -55,7 +55,7 @@ public class OperationControllerTest {
 		// Withdraw Operation
 		account2 = new Account(12345L, 1500);
 		operation2 = new Operation(account2, 500, OperationType.WITHDRAW);
-		account2.setBalance(account2.getBalance() + operation2.getAmount());
+		account2.setBalance(account2.getBalance() - operation2.getAmount());
 		operation2.setAccount(account2);
 	}
 

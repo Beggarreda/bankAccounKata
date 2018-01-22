@@ -25,4 +25,11 @@ public class OperationController {
 		return operationService.makeADeposit(operationRequest);
 
 	}
+	
+	@PostMapping(path = "/withdraw", consumes = "application/json", produces = "application/json")
+	public Operation createWithdraw(@RequestBody OperationRequest operationRequest) {
+
+		return operationService.makeAWithdraw(operationRequest);
+
+	}
 }
