@@ -49,6 +49,24 @@ public class BankAccountApiIntegrationTest {
 		Assertions.assertThat(response.getBody().getBalance()).isEqualTo(1500);
 
 	}
+	
+	@Test
+	public void should_CreateAnOtherAccount() throws Exception {
+
+		// arrange
+		Account account = new Account(6789L, 1600);
+
+		// act
+		HttpEntity<Account> request = new HttpEntity<Account>(account);
+		ResponseEntity<Account> response = restTemplate.exchange("/account", HttpMethod.POST, request, Account.class);
+
+		// assert
+
+		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		Assertions.assertThat(response.getBody().getAccountNumber()).isEqualTo(6789);
+		Assertions.assertThat(response.getBody().getBalance()).isEqualTo(1600);
+
+	}
 
 	@Test
 	public void should_MakeADeposit() throws Exception {
@@ -74,7 +92,7 @@ public class BankAccountApiIntegrationTest {
 	public void should_MakeAWithdraw() throws Exception {
 
 		// arrange
-		OperationRequest operationRequest = new OperationRequest(12345L, 1050);
+		OperationRequest operationRequest = new OperationRequest(6789L, 1000);
 
 		// act
 		HttpEntity<OperationRequest> request = new HttpEntity<OperationRequest>(operationRequest);
@@ -83,9 +101,9 @@ public class BankAccountApiIntegrationTest {
 		// assert
 
 		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-		Assertions.assertThat(response.getBody().getAccount().getAccountNumber()).isEqualTo(12345);
-		Assertions.assertThat(response.getBody().getAmount()).isEqualTo(1050);
-		Assertions.assertThat(response.getBody().getAccount().getBalance()).isEqualTo(950);
+		Assertions.assertThat(response.getBody().getAccount().getAccountNumber()).isEqualTo(6789);
+		Assertions.assertThat(response.getBody().getAmount()).isEqualTo(1000);
+		Assertions.assertThat(response.getBody().getAccount().getBalance()).isEqualTo(1400);
 		Assertions.assertThat(response.getBody().getOperationType()).isEqualTo(OperationType.WITHDRAW);
 
 	}
@@ -94,7 +112,7 @@ public class BankAccountApiIntegrationTest {
 	public void should_MakeATransfer() throws Exception {
 
 		// arrange
-		TransferRequest transferRequest = new TransferRequest(12345L,6789L,1000 );
+		TransferRequest transferRequest = new TransferRequest(12345L,6789L,800 );
 
 		// act
 		HttpEntity<TransferRequest> request = new HttpEntity<TransferRequest>(transferRequest);
@@ -105,9 +123,9 @@ public class BankAccountApiIntegrationTest {
 		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		Assertions.assertThat(response.getBody().getAccount().getAccountNumber()).isEqualTo(12345);
 		Assertions.assertThat(response.getBody().getPayee().getAccountNumber()).isEqualTo(6789);
-		Assertions.assertThat(response.getBody().getAmount()).isEqualTo(1000);
-		Assertions.assertThat(response.getBody().getAccount().getBalance()).isEqualTo(950);
-		Assertions.assertThat(response.getBody().getPayee().getBalance()).isEqualTo(1000);
+		Assertions.assertThat(response.getBody().getAmount()).isEqualTo(800);
+		Assertions.assertThat(response.getBody().getAccount().getBalance()).isEqualTo(1200);
+		Assertions.assertThat(response.getBody().getPayee().getBalance()).isEqualTo(2400);
 		Assertions.assertThat(response.getBody().getOperationType()).isEqualTo(OperationType.TRANSFERT);
 
 	}

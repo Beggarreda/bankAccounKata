@@ -43,8 +43,9 @@ public class OperationService implements IOperationService {
 
 	@Override
 	public Operation makeATransfer(TransferRequest transferRequest) {
-		Account account = accountService.updateAccount_when_deposit(transferRequest);
-		Account account2 = accountService.updateAccount_when_withdraw(transferRequest);
+		OperationRequest payeeRequest = new OperationRequest(transferRequest.getPayeeAccountNumber(), transferRequest.getAmount());;
+		Account account = accountService.updateAccount_when_withdraw(transferRequest);
+		Account account2 = accountService.updateAccount_when_deposit(payeeRequest);
 		Operation operation = new Operation(account, account2,transferRequest.getAmount(), OperationType.TRANSFERT);
 		operationRepository.save(operation);
 		
