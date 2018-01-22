@@ -73,7 +73,7 @@ public class BankAccountApiIntegrationTest {
 	public void should_MakeAWithdraw() throws Exception {
 
 		// arrange
-		OperationRequest operationRequest = new OperationRequest(12345L, 1500);
+		OperationRequest operationRequest = new OperationRequest(12345L, 1050);
 
 		// act
 		HttpEntity<OperationRequest> request = new HttpEntity<OperationRequest>(operationRequest);
@@ -83,8 +83,8 @@ public class BankAccountApiIntegrationTest {
 
 		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		Assertions.assertThat(response.getBody().getAccount().getAccountNumber()).isEqualTo(12345);
-		Assertions.assertThat(response.getBody().getAmount()).isEqualTo(1500);
-		Assertions.assertThat(response.getBody().getAccount().getBalance()).isEqualTo(500);
+		Assertions.assertThat(response.getBody().getAmount()).isEqualTo(1050);
+		Assertions.assertThat(response.getBody().getAccount().getBalance()).isEqualTo(950);
 		Assertions.assertThat(response.getBody().getOperationType()).isEqualTo(OperationType.WITHDRAW);
 
 	}
