@@ -21,9 +21,6 @@ import com.redabeggar.bankAccountApi.utils.OperationRequest;
 import com.redabeggar.bankAccountApi.utils.OperationType;
 import com.redabeggar.bankAccountApi.utils.TransferRequest;
 
-
-
-
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
@@ -31,7 +28,7 @@ public class BankAccountApiIntegrationTest {
 
 	@Autowired
 	TestRestTemplate restTemplate;
-	
+
 	@Test
 	public void should_CreateAnAccount() throws Exception {
 
@@ -49,7 +46,7 @@ public class BankAccountApiIntegrationTest {
 		Assertions.assertThat(response.getBody().getBalance()).isEqualTo(1500);
 
 	}
-	
+
 	@Test
 	public void should_CreateAnOtherAccount() throws Exception {
 
@@ -76,7 +73,8 @@ public class BankAccountApiIntegrationTest {
 
 		// act
 		HttpEntity<OperationRequest> request = new HttpEntity<OperationRequest>(operationRequest);
-		ResponseEntity<Operation> response = restTemplate.exchange("/deposit", HttpMethod.POST, request, Operation.class);
+		ResponseEntity<Operation> response = restTemplate.exchange("/deposit", HttpMethod.POST, request,
+				Operation.class);
 
 		// assert
 
@@ -87,7 +85,7 @@ public class BankAccountApiIntegrationTest {
 		Assertions.assertThat(response.getBody().getOperationType()).isEqualTo(OperationType.DEPOSIT);
 
 	}
-	
+
 	@Test
 	public void should_MakeAWithdraw() throws Exception {
 
@@ -96,7 +94,8 @@ public class BankAccountApiIntegrationTest {
 
 		// act
 		HttpEntity<OperationRequest> request = new HttpEntity<OperationRequest>(operationRequest);
-		ResponseEntity<Operation> response = restTemplate.exchange("/withdraw", HttpMethod.POST, request, Operation.class);
+		ResponseEntity<Operation> response = restTemplate.exchange("/withdraw", HttpMethod.POST, request,
+				Operation.class);
 
 		// assert
 
@@ -107,16 +106,17 @@ public class BankAccountApiIntegrationTest {
 		Assertions.assertThat(response.getBody().getOperationType()).isEqualTo(OperationType.WITHDRAW);
 
 	}
-	
+
 	@Test
 	public void should_MakeATransfer() throws Exception {
 
 		// arrange
-		TransferRequest transferRequest = new TransferRequest(12345L,6789L,800 );
+		TransferRequest transferRequest = new TransferRequest(12345L, 6789L, 800);
 
 		// act
 		HttpEntity<TransferRequest> request = new HttpEntity<TransferRequest>(transferRequest);
-		ResponseEntity<Operation> response = restTemplate.exchange("/transfer", HttpMethod.POST, request, Operation.class);
+		ResponseEntity<Operation> response = restTemplate.exchange("/transfer", HttpMethod.POST, request,
+				Operation.class);
 
 		// assert
 
@@ -129,9 +129,17 @@ public class BankAccountApiIntegrationTest {
 		Assertions.assertThat(response.getBody().getOperationType()).isEqualTo(OperationType.TRANSFERT);
 
 	}
-	
 
+	@Test
+	public void should_getTransferHistory() throws Exception {
+		// arrange
 
+		// act
+		ResponseEntity<Operation[]> response = restTemplate.getForEntity("/transfer_history/12345", Operation[].class);
 
-	
+		// assert
+		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
+	}
+
 }
