@@ -1,13 +1,12 @@
 package com.redabeggar.bankAccountApi.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import com.redabeggar.bankAccountApi.model.Account;
 
-public class AccountRepository  {
-
-	public Account findOne(long anyLong) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+@Repository
+public interface AccountRepository extends JpaRepository<Account, Long> {
 
 
 
