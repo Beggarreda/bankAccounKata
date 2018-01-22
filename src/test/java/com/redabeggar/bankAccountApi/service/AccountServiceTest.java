@@ -14,6 +14,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.redabeggar.bankAccountApi.model.Account;
 import com.redabeggar.bankAccountApi.repository.AccountRepository;
+import com.redabeggar.bankAccountApi.utils.OperationRequest;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AccountServiceTest {
@@ -25,12 +26,15 @@ public class AccountServiceTest {
     @InjectMocks
     private AccountService accountService;
 
+    OperationRequest operationRequest;
     Account account;
+    
 
 
     @Before
     public void setUp() throws Exception {
         account = new Account(12345L,1500);
+        operationRequest = new OperationRequest(12345L, 500);
     }
 
     @Test
@@ -48,7 +52,7 @@ public class AccountServiceTest {
         given(accountRepository.findOne(anyLong())).willReturn(account);
         given(accountRepository.save(any(Account.class))).willReturn(account);
 
-        Account updated_account = accountService.updateAccount(account);
+        Account updated_account = accountService.updateAccount(operationRequest);
 
         assertThat(updated_account.getAccountNumber()).isEqualTo(12345);
         assertThat(updated_account.getBalance()).isEqualTo(2000);
