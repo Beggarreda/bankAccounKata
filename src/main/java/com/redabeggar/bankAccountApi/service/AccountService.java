@@ -3,6 +3,7 @@ package com.redabeggar.bankAccountApi.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.redabeggar.bankAccountApi.exception.AccountAlreadyExistException;
 import com.redabeggar.bankAccountApi.exception.AccountNotFoundException;
 import com.redabeggar.bankAccountApi.exception.AmountNotValidException;
 import com.redabeggar.bankAccountApi.model.Account;
@@ -37,9 +38,12 @@ private AccountRepository accountRepository;
 	    }
 
 
-	public Account createAccount(Object anyObject) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	public Account createAccount(Account account) {
+		
+		 if(accountRepository.findOne(account.getAccountNumber()) != null)
+	            throw new AccountAlreadyExistException("Account Already Exist");
+		
+	        return accountRepository.save(account);
+	    }
 
 }
