@@ -2,6 +2,7 @@ package com.redabeggar.bankAccountApi.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 
 import org.junit.Before;
@@ -41,4 +42,17 @@ public class AccountServiceTest {
         assertThat(account.getAccountNumber()).isEqualTo(12345);
         assertThat(account.getBalance()).isEqualTo(1500);
     }
+    
+    @Test
+    public void should_UpdateAnAccount() throws Exception {
+        given(accountRepository.findOne(anyLong())).willReturn(account);
+        given(accountRepository.save(any(Account.class))).willReturn(account);
+
+        Account updated_account = accountService.updateAccount(account);
+
+        assertThat(updated_account.getAccountNumber()).isEqualTo(12345);
+        assertThat(updated_account.getBalance()).isEqualTo(2000);
+    }
+    
+    
 }

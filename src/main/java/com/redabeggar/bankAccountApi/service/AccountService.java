@@ -15,4 +15,9 @@ private AccountRepository accountRepository;
 		return accountRepository.findOne(accountNumber);
 	}
 
+	public Account updateAccount(Account account) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
