@@ -1,5 +1,7 @@
 package com.redabeggar.bankAccountApi.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -50,6 +52,13 @@ public class OperationService implements IOperationService {
 		operationRepository.save(operation);
 		
 		return operation;
+	}
+
+
+	@Override
+	public List<Operation> getTransferHistory(long anyLong) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

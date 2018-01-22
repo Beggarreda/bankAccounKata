@@ -1,10 +1,14 @@
 package com.redabeggar.bankAccountApi.controller;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyObject;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.redabeggar.bankAccountApi.model.Account;
@@ -42,7 +47,9 @@ public class OperationControllerTest {
 	private Operation deposit_operation;
 	private Operation withdraw_operation;
 	private Operation transfer_operation;
-
+	private Operation transfer_operation2;
+	private Operation transfer_operation3;
+	private List<Operation> list_transfer_operation;
 	@Before
 	public void setUp() throws Exception {
 		operationRequest = new OperationRequest(12345L, 500);
@@ -65,6 +72,13 @@ public class OperationControllerTest {
 		account2.setBalance(account2.getBalance() + transfer_operation.getAmount());
 		transfer_operation.setAccount(account);
 		transfer_operation.setPayee(account2);
+		
+		// transfer operations
+		transfer_operation2 = new Operation(account, account2,500, OperationType.TRANSFERT);
+		transfer_operation3 = new Operation(account, account2,900, OperationType.TRANSFERT);
+		list_transfer_operation = new ArrayList<Operation>();
+        list_transfer_operation.add(transfer_operation2);
+        list_transfer_operation.add(transfer_operation3);
 	}
 
 	@Test
@@ -103,5 +117,22 @@ public class OperationControllerTest {
 				.andExpect(jsonPath("amount").value(800))
 				.andExpect(jsonPath("account.balance").value(1200))
 				.andExpect(jsonPath("payee.balance").value(1800));
+	}
+	
+	
+	@Test
+	public void should_getTransferHistory() throws Exception {
+		
+		
+
+		given(operationService.getTransferHistory(anyLong())).willReturn(list_transfer_operation);
+
+		mockMvc.perform(MockMvcRequestBuilders.get("/transfer_history/12345"))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("account.accountNumber").value(12345))
+				.andExpect(jsonPath("payee.accountNumber").value(6789))
+				.andExpect(jsonPath("amount").value(800))
+				.andExpect(jsonPath("operationType").value(OperationType.TRANSFERT));
+				
 	}
 }
