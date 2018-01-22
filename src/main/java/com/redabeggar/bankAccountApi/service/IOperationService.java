@@ -7,6 +7,6 @@ public interface IOperationService {
 
 	Operation makeADeposit(OperationRequest operationRequest);
 
-	Operation makeAWithdraw(Object anyObject);
+	Operation makeAWithdraw(OperationRequest operationRequest);
 
 }

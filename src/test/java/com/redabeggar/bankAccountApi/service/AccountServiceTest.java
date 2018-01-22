@@ -59,6 +59,17 @@ public class AccountServiceTest {
     }
     
     @Test
+    public void should_UpdateAnAccount_when_withdraw() throws Exception {
+        given(accountRepository.findOne(anyLong())).willReturn(account);
+        given(accountRepository.save(any(Account.class))).willReturn(account);
+
+        Account updated_account = accountService.updateAccount_when_withdraw(operationRequest);
+
+        assertThat(updated_account.getAccountNumber()).isEqualTo(12345);
+        assertThat(updated_account.getBalance()).isEqualTo(1000);
+    }
+    
+    @Test
     public void should_CreateAnAccount() throws Exception {
         given(accountRepository.save(any(Account.class))).willReturn(account);
 

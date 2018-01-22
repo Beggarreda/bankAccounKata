@@ -31,9 +31,12 @@ public class OperationService implements IOperationService {
 
 
 	@Override
-	public Operation makeAWithdraw(Object anyObject) {
-		// TODO Auto-generated method stub
-		return null;
+	public Operation makeAWithdraw(OperationRequest operationRequest) {
+		Account account = accountService.updateAccount_when_withdraw(operationRequest);
+		Operation operation = new Operation(account, operationRequest.getAmount(), OperationType.DEPOSIT);
+		operationRepository.save(operation);
+		
+		return operation;
 	}
 
 }
