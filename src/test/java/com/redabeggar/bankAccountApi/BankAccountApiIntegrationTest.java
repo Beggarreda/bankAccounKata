@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.redabeggar.bankAccountApi.model.Account;
 import com.redabeggar.bankAccountApi.model.Operation;
 import com.redabeggar.bankAccountApi.utils.OperationRequest;
 import com.redabeggar.bankAccountApi.utils.OperationType;
@@ -29,6 +30,24 @@ public class BankAccountApiIntegrationTest {
 
 	@Autowired
 	TestRestTemplate restTemplate;
+	
+	@Test
+	public void should_CreateAnAccount() throws Exception {
+
+		// arrange
+		Account account = new Account(12345L, 1500);
+
+		// act
+		HttpEntity<Account> request = new HttpEntity<Account>(account);
+		ResponseEntity<Account> response = restTemplate.exchange("/account", HttpMethod.POST, request, Account.class);
+
+		// assert
+
+		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		Assertions.assertThat(response.getBody().getAccountNumber()).isEqualTo(12345);
+		Assertions.assertThat(response.getBody().getBalance()).isEqualTo(1500);
+
+	}
 
 	@Test
 	public void should_MakeADeposit() throws Exception {
@@ -49,6 +68,8 @@ public class BankAccountApiIntegrationTest {
 		Assertions.assertThat(response.getBody().getOperationType()).isEqualTo(OperationType.DEPOSIT);
 
 	}
+	
+
 
 
 	
