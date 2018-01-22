@@ -45,6 +45,7 @@ public class OperationServiceTest {
 	private Operation transfer_operation3;
 	private Operation transfer_operation4;
 	private List<Operation> list_transfer_operation;
+	private List<Operation> list_transfer_operation2;
 
 	@Before
 	public void setUp() throws Exception {
@@ -75,8 +76,10 @@ public class OperationServiceTest {
 		transfer_operation3 = new Operation(account, account2, 900, OperationType.TRANSFERT);
 		transfer_operation4 = new Operation(account2, account, 300, OperationType.TRANSFERT);
 		list_transfer_operation = new ArrayList<Operation>();
+		list_transfer_operation2 = new ArrayList<Operation>();
 		list_transfer_operation.add(transfer_operation2);
 		list_transfer_operation.add(transfer_operation3);
+		list_transfer_operation2.add(transfer_operation4);
 	}
 
 	@Test
@@ -110,8 +113,8 @@ public class OperationServiceTest {
 	@Test
 	public void should_MakeATransfer() throws Exception {
 
-		given(accountService.updateAccount_when_deposit(anyObject())).willReturn(account);
-		given(accountService.updateAccount_when_withdraw(anyObject())).willReturn(account2);
+		given(accountService.updateAccount_when_withdraw(anyObject())).willReturn(account);
+		given(accountService.updateAccount_when_deposit(anyObject())).willReturn(account2);
 		given(operationRepository.save(any(Operation.class))).willReturn(transfer_operation);
 
 		Operation operation = operationService.makeATransfer(transferRequest);
@@ -128,10 +131,11 @@ public class OperationServiceTest {
 	public void should_getTransferHistory() throws Exception {
 
 		given(operationRepository.findByAccountAccountNumber(anyLong())).willReturn(list_transfer_operation);
-		given(operationRepository.findByPayeeAccountNumber(anyLong())).willReturn(transfer_operation3);
+		given(operationRepository.findByPayeeAccountNumber(anyLong())).willReturn(list_transfer_operation2);
 
 		List<Operation> operations = operationService.getTransferHistory(12345L);
 
+		Assertions.assertThat(operations.size()).isEqualTo(3);
 		Assertions.assertThat(operations.get(0).getAccount().getAccountNumber()).isEqualTo(12345);
 		Assertions.assertThat(operations.get(1).getPayee().getAccountNumber()).isEqualTo(6789);
 		Assertions.assertThat(operations.get(0).getAccount().getBalance()).isEqualTo(1200);

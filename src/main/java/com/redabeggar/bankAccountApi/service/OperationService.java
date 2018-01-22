@@ -1,5 +1,6 @@
 package com.redabeggar.bankAccountApi.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +57,11 @@ public class OperationService implements IOperationService {
 
 
 	@Override
-	public List<Operation> getTransferHistory(long anyLong) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Operation> getTransferHistory(long accountNumber) {
+		List<Operation> transfers = new ArrayList<Operation>();
+		transfers.addAll(operationRepository.findByAccountAccountNumber(accountNumber));
+		transfers.addAll(operationRepository.findByPayeeAccountNumber(accountNumber));
+		return transfers;
 	}
 
 }
