@@ -23,6 +23,8 @@ public class OperationServiceTest {
 
 	@Mock
 	private OperationRepository operationRepository;
+	@Mock
+	private AccountService accountService;
 
 	@InjectMocks
 	OperationService operationService;
@@ -45,7 +47,8 @@ public class OperationServiceTest {
 	
 	@Test
 	public void should_MakeADeposit() throws Exception {
-		
+			
+		given(accountService.updateAccount(anyObject())).willReturn(account);
 		given(operationRepository.save(anyObject())).willReturn(operation);
 		
 		
