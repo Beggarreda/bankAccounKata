@@ -6,7 +6,7 @@ import com.redabeggar.bankAccountApi.utils.OperationRequest;
 public interface IAccountService {
 
 	Account getAccount(long accountNumber);
-
 	Account updateAccount(OperationRequest operationRequest);
+    Account createAccount(Account account);
 
 }
