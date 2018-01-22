@@ -52,7 +52,7 @@ public class AccountServiceTest {
         given(accountRepository.findOne(anyLong())).willReturn(account);
         given(accountRepository.save(any(Account.class))).willReturn(account);
 
-        Account updated_account = accountService.updateAccount(operationRequest);
+        Account updated_account = accountService.updateAccount_when_deposit(operationRequest);
 
         assertThat(updated_account.getAccountNumber()).isEqualTo(12345);
         assertThat(updated_account.getBalance()).isEqualTo(2000);

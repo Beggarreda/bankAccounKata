@@ -25,7 +25,7 @@ private AccountRepository accountRepository;
 
 	
 	@Override
-	public Account updateAccount(OperationRequest operationRequest) {
+	public Account updateAccount_when_deposit(OperationRequest operationRequest) {
 		Account account = accountRepository.findOne(operationRequest.getAccountNumber());
 		 if(account == null)
 	            throw new AccountNotFoundException("Account Not Found");

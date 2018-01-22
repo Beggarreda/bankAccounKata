@@ -59,7 +59,7 @@ public class OperationServiceTest {
 	@Test
 	public void should_MakeADeposit() throws Exception {
 			
-		given(accountService.updateAccount(anyObject())).willReturn(account);
+		given(accountService.updateAccount_when_deposit(anyObject())).willReturn(account);
 		given(operationRepository.save(any(Operation.class))).willReturn(operation);
 		
 		
@@ -75,7 +75,7 @@ public class OperationServiceTest {
 	@Test
 	public void should_MakeAWithdraw() throws Exception {
 			
-		given(accountService.updateAccount(anyObject())).willReturn(account2);
+		given(accountService.updateAccount_when_withdraw(anyObject())).willReturn(account2);
 		given(operationRepository.save(any(Operation.class))).willReturn(operation2);
 		
 		
