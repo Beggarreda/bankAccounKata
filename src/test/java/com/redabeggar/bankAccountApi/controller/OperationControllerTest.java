@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -129,10 +130,11 @@ public class OperationControllerTest {
 
 		mockMvc.perform(MockMvcRequestBuilders.get("/transfer_history/12345"))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("account.accountNumber").value(12345))
-				.andExpect(jsonPath("payee.accountNumber").value(6789))
-				.andExpect(jsonPath("amount").value(800))
-				.andExpect(jsonPath("operationType").value(OperationType.TRANSFERT));
+				.andExpect(jsonPath("$", Matchers.hasSize(2)))
+				.andExpect(jsonPath("$[0].account.accountNumber").value(12345))
+				.andExpect(jsonPath("$[0].payee.accountNumber").value(6789))
+				.andExpect(jsonPath("$[0].amount").value(500))
+				.andExpect(jsonPath("$[0].operationType").value("TRANSFERT"));
 				
 	}
 }
