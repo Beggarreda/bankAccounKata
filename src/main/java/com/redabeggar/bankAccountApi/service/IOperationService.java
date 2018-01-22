@@ -2,6 +2,7 @@ package com.redabeggar.bankAccountApi.service;
 
 import com.redabeggar.bankAccountApi.model.Operation;
 import com.redabeggar.bankAccountApi.utils.OperationRequest;
+import com.redabeggar.bankAccountApi.utils.TransferRequest;
 
 public interface IOperationService {
 
@@ -9,6 +10,6 @@ public interface IOperationService {
 
 	Operation makeAWithdraw(OperationRequest operationRequest);
 
-	Object makeATransfer(Object anyObject);
+	Operation makeATransfer(TransferRequest transferRequest);
 
 }

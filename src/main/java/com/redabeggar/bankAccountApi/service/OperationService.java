@@ -8,6 +8,7 @@ import com.redabeggar.bankAccountApi.model.Operation;
 import com.redabeggar.bankAccountApi.repository.OperationRepository;
 import com.redabeggar.bankAccountApi.utils.OperationRequest;
 import com.redabeggar.bankAccountApi.utils.OperationType;
+import com.redabeggar.bankAccountApi.utils.TransferRequest;
 
 @Service
 public class OperationService implements IOperationService {
@@ -41,7 +42,7 @@ public class OperationService implements IOperationService {
 
 
 	@Override
-	public Object makeATransfer(Object anyObject) {
+	public Operation makeATransfer(TransferRequest transferRequest) {
 		// TODO Auto-generated method stub
 		return null;
 	}

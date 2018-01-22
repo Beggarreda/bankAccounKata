@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.redabeggar.bankAccountApi.model.Operation;
 import com.redabeggar.bankAccountApi.service.IOperationService;
 import com.redabeggar.bankAccountApi.utils.OperationRequest;
+import com.redabeggar.bankAccountApi.utils.TransferRequest;
 
 
 @RestController
@@ -30,6 +31,13 @@ public class OperationController {
 	public Operation createWithdraw(@RequestBody OperationRequest operationRequest) {
 
 		return operationService.makeAWithdraw(operationRequest);
+
+	}
+	
+	@PostMapping(path = "/transfer", consumes = "application/json", produces = "application/json")
+	public Operation createTransfer(@RequestBody TransferRequest transferRequest) {
+
+		return operationService.makeATransfer(transferRequest);
 
 	}
 }

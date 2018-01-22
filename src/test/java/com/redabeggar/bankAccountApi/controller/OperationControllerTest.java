@@ -59,7 +59,7 @@ public class OperationControllerTest {
 		account2.setBalance(account2.getBalance() - withdraw_operation.getAmount());
 		withdraw_operation.setAccount(account2);
 
-		// Transfer Operation 
+		// Transfer Operation -balance1 = 1200- and -balance2 = 1800-
 		transfer_operation = new Operation(account, account2,800, OperationType.TRANSFERT);
 		account.setBalance(account.getBalance() - transfer_operation.getAmount());
 		account2.setBalance(account2.getBalance() + transfer_operation.getAmount());
@@ -74,8 +74,9 @@ public class OperationControllerTest {
 
 		mockMvc.perform(post("/deposit").contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(operationRequest))).andExpect(status().isOk())
-				.andExpect(jsonPath("account.accountNumber").value(12345)).andExpect(jsonPath("amount").value(500))
-				.andExpect(jsonPath("account.balance").value(2000));
+				.andExpect(jsonPath("account.accountNumber").value(12345))
+				.andExpect(jsonPath("amount").value(500))
+				.andExpect(jsonPath("account.balance").value(1200));
 	}
 
 	@Test
@@ -87,7 +88,7 @@ public class OperationControllerTest {
 				.content(mapper.writeValueAsString(operationRequest))).andExpect(status().isOk())
 				.andExpect(jsonPath("account.accountNumber").value(6789))
 				.andExpect(jsonPath("amount").value(500))
-				.andExpect(jsonPath("account.balance").value(1000));
+				.andExpect(jsonPath("account.balance").value(1800));
 	}
 
 	@Test
