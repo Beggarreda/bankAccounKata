@@ -42,23 +42,23 @@ public class OperationServiceTest {
 	@Before
 	public void setUp() throws Exception {
 		operationRequest = new OperationRequest(12345L, 500);
-	    transferRequest = new TransferRequest(12345L,6789L,1000 );
+	    transferRequest = new TransferRequest(12345L,6789L,800 );
 
 		
 		// Deposit Operation -balance = 2000-
 		account = new Account(12345L, 1500);
-		deposit_operation = new Operation(account, 500, OperationType.DEPOSIT);
+		deposit_operation = new Operation(account, operationRequest.getAmount(), OperationType.DEPOSIT);
 		account.setBalance(account.getBalance() + deposit_operation.getAmount());
 		deposit_operation.setAccount(account);
 
 		// Withdraw Operation -balance = 1000-
 		account2 = new Account(6789L, 1500);
-		withdraw_operation = new Operation(account2, 500, OperationType.WITHDRAW);
+		withdraw_operation = new Operation(account2, operationRequest.getAmount(), OperationType.WITHDRAW);
 		account2.setBalance(account2.getBalance() - withdraw_operation.getAmount());
 		withdraw_operation.setAccount(account2);
 
 		// Transfer Operation -balance1 = 1200- and -balance2 = 1800-
-		transfer_operation = new Operation(account, account2,800, OperationType.TRANSFERT);
+		transfer_operation = new Operation(account, account2,transferRequest.getAmount(), OperationType.TRANSFERT);
 		account.setBalance(account.getBalance() - transfer_operation.getAmount());
 		account2.setBalance(account2.getBalance() + transfer_operation.getAmount());
 		transfer_operation.setAccount(account);
@@ -93,7 +93,7 @@ public class OperationServiceTest {
 		
 		Operation operation = operationService.makeAWithdraw(operationRequest);
 
-		Assertions.assertThat(operation.getAccount().getAccountNumber()).isEqualTo(12345);
+		Assertions.assertThat(operation.getAccount().getAccountNumber()).isEqualTo(6789);
 		Assertions.assertThat(operation.getAccount().getBalance()).isEqualTo(1800);
 		Assertions.assertThat(operation.getAmount()).isEqualTo(500);
 		Assertions.assertThat(operation.getOperationType()).isEqualTo(OperationType.WITHDRAW);
@@ -111,7 +111,7 @@ public class OperationServiceTest {
 
 		Assertions.assertThat(operation.getAccount().getAccountNumber()).isEqualTo(12345);
 		Assertions.assertThat(operation.getPayee().getAccountNumber()).isEqualTo(6789);
-		Assertions.assertThat(operation.getAmount()).isEqualTo(500);
+		Assertions.assertThat(operation.getAmount()).isEqualTo(800);
 		Assertions.assertThat(operation.getAccount().getBalance()).isEqualTo(1200);
 		Assertions.assertThat(operation.getPayee().getBalance()).isEqualTo(1800);
 		Assertions.assertThat(operation.getOperationType()).isEqualTo(OperationType.TRANSFERT);

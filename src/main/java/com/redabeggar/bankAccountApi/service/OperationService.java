@@ -43,8 +43,12 @@ public class OperationService implements IOperationService {
 
 	@Override
 	public Operation makeATransfer(TransferRequest transferRequest) {
-		// TODO Auto-generated method stub
-		return null;
+		Account account = accountService.updateAccount_when_deposit(transferRequest);
+		Account account2 = accountService.updateAccount_when_withdraw(transferRequest);
+		Operation operation = new Operation(account, account2,transferRequest.getAmount(), OperationType.TRANSFERT);
+		operationRepository.save(operation);
+		
+		return operation;
 	}
 
 }
