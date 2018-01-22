@@ -7,6 +7,9 @@ public class OperationService {
 
 	public Operation makeADeposit(OperationRequest operationRequest) {
 		
+		// get account by accountNumber
+		
+		// update account -balance-
 		
 		return null;
 	}
