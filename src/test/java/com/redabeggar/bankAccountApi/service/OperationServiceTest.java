@@ -2,7 +2,11 @@ package com.redabeggar.bankAccountApi.service;
 
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.anyObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
@@ -19,7 +23,6 @@ import com.redabeggar.bankAccountApi.utils.OperationRequest;
 import com.redabeggar.bankAccountApi.utils.OperationType;
 import com.redabeggar.bankAccountApi.utils.TransferRequest;
 
-
 @RunWith(MockitoJUnitRunner.class)
 public class OperationServiceTest {
 
@@ -30,7 +33,7 @@ public class OperationServiceTest {
 
 	@InjectMocks
 	OperationService operationService;
-	
+
 	private OperationRequest operationRequest;
 	private TransferRequest transferRequest;
 	private Account account;
@@ -38,13 +41,16 @@ public class OperationServiceTest {
 	private Operation deposit_operation;
 	private Operation withdraw_operation;
 	private Operation transfer_operation;
+	private Operation transfer_operation2;
+	private Operation transfer_operation3;
+	private Operation transfer_operation4;
+	private List<Operation> list_transfer_operation;
 
 	@Before
 	public void setUp() throws Exception {
 		operationRequest = new OperationRequest(12345L, 500);
-	    transferRequest = new TransferRequest(12345L,6789L,800 );
+		transferRequest = new TransferRequest(12345L, 6789L, 800);
 
-		
 		// Deposit Operation -balance = 2000-
 		account = new Account(12345L, 1500);
 		deposit_operation = new Operation(account, operationRequest.getAmount(), OperationType.DEPOSIT);
@@ -58,23 +64,27 @@ public class OperationServiceTest {
 		withdraw_operation.setAccount(account2);
 
 		// Transfer Operation -balance1 = 1200- and -balance2 = 1800-
-		transfer_operation = new Operation(account, account2,transferRequest.getAmount(), OperationType.TRANSFERT);
+		transfer_operation = new Operation(account, account2, transferRequest.getAmount(), OperationType.TRANSFERT);
 		account.setBalance(account.getBalance() - transfer_operation.getAmount());
 		account2.setBalance(account2.getBalance() + transfer_operation.getAmount());
 		transfer_operation.setAccount(account);
 		transfer_operation.setPayee(account2);
+
+		// transfer operations
+		transfer_operation2 = new Operation(account, account2, 500, OperationType.TRANSFERT);
+		transfer_operation3 = new Operation(account, account2, 900, OperationType.TRANSFERT);
+		transfer_operation4 = new Operation(account2, account, 300, OperationType.TRANSFERT);
+		list_transfer_operation = new ArrayList<Operation>();
+		list_transfer_operation.add(transfer_operation2);
+		list_transfer_operation.add(transfer_operation3);
 	}
 
-	
-
-	
 	@Test
 	public void should_MakeADeposit() throws Exception {
-			
+
 		given(accountService.updateAccount_when_deposit(anyObject())).willReturn(account);
 		given(operationRepository.save(any(Operation.class))).willReturn(deposit_operation);
-		
-		
+
 		Operation operation = operationService.makeADeposit(operationRequest);
 
 		Assertions.assertThat(operation.getAccount().getAccountNumber()).isEqualTo(12345);
@@ -82,15 +92,13 @@ public class OperationServiceTest {
 		Assertions.assertThat(operation.getAmount()).isEqualTo(500);
 		Assertions.assertThat(operation.getOperationType()).isEqualTo(OperationType.DEPOSIT);
 	}
-	
-	
+
 	@Test
 	public void should_MakeAWithdraw() throws Exception {
-			
+
 		given(accountService.updateAccount_when_withdraw(anyObject())).willReturn(account2);
 		given(operationRepository.save(any(Operation.class))).willReturn(withdraw_operation);
-		
-		
+
 		Operation operation = operationService.makeAWithdraw(operationRequest);
 
 		Assertions.assertThat(operation.getAccount().getAccountNumber()).isEqualTo(6789);
@@ -98,15 +106,14 @@ public class OperationServiceTest {
 		Assertions.assertThat(operation.getAmount()).isEqualTo(500);
 		Assertions.assertThat(operation.getOperationType()).isEqualTo(OperationType.WITHDRAW);
 	}
-	
+
 	@Test
 	public void should_MakeATransfer() throws Exception {
-			
+
 		given(accountService.updateAccount_when_deposit(anyObject())).willReturn(account);
 		given(accountService.updateAccount_when_withdraw(anyObject())).willReturn(account2);
 		given(operationRepository.save(any(Operation.class))).willReturn(transfer_operation);
-		
-		
+
 		Operation operation = operationService.makeATransfer(transferRequest);
 
 		Assertions.assertThat(operation.getAccount().getAccountNumber()).isEqualTo(12345);
@@ -115,5 +122,20 @@ public class OperationServiceTest {
 		Assertions.assertThat(operation.getAccount().getBalance()).isEqualTo(1200);
 		Assertions.assertThat(operation.getPayee().getBalance()).isEqualTo(1800);
 		Assertions.assertThat(operation.getOperationType()).isEqualTo(OperationType.TRANSFERT);
+	}
+
+	@Test
+	public void should_getTransferHistory() throws Exception {
+
+		given(operationRepository.findByAccountAccountNumber(anyLong())).willReturn(list_transfer_operation);
+		given(operationRepository.findByPayeeAccountNumber(anyLong())).willReturn(transfer_operation3);
+
+		List<Operation> operations = operationService.getTransferHistory(12345L);
+
+		Assertions.assertThat(operations.get(0).getAccount().getAccountNumber()).isEqualTo(12345);
+		Assertions.assertThat(operations.get(1).getPayee().getAccountNumber()).isEqualTo(6789);
+		Assertions.assertThat(operations.get(0).getAccount().getBalance()).isEqualTo(1200);
+		Assertions.assertThat(operations.get(1).getAmount()).isEqualTo(900);
+		Assertions.assertThat(operations.get(2).getOperationType()).isEqualTo(OperationType.TRANSFERT);
 	}
 }
