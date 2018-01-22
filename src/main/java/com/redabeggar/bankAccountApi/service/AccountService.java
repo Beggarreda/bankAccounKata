@@ -1,6 +1,7 @@
 package com.redabeggar.bankAccountApi.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.redabeggar.bankAccountApi.exception.AccountNotFoundException;
 import com.redabeggar.bankAccountApi.exception.AmountNotValidException;
@@ -8,16 +9,21 @@ import com.redabeggar.bankAccountApi.model.Account;
 import com.redabeggar.bankAccountApi.repository.AccountRepository;
 import com.redabeggar.bankAccountApi.utils.OperationRequest;
 
-public class AccountService {
+@Service
+public class AccountService implements IAccountService {
 
 @Autowired	
 private AccountRepository accountRepository;
 
+	
+	@Override
 	public Account getAccount(long accountNumber) {
 
 		return accountRepository.findOne(accountNumber);
 	}
 
+	
+	@Override
 	public Account updateAccount(OperationRequest operationRequest) {
 		Account account = accountRepository.findOne(operationRequest.getAccountNumber());
 		 if(account == null)
