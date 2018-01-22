@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.redabeggar.bankAccountApi.model.Account;
 import com.redabeggar.bankAccountApi.model.Operation;
-import com.redabeggar.bankAccountApi.service.OperationService;
+import com.redabeggar.bankAccountApi.service.IOperationService;
 import com.redabeggar.bankAccountApi.utils.OperationRequest;
 import com.redabeggar.bankAccountApi.utils.OperationType;
 
@@ -31,7 +31,7 @@ public class OperationControllerTest {
 	MockMvc mockMvc;
 
 	@MockBean
-	private OperationService operationService;
+	private IOperationService operationService;
 
 	@Autowired
 	private ObjectMapper mapper;

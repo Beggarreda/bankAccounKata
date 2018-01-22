@@ -1,6 +1,7 @@
 package com.redabeggar.bankAccountApi.service;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyObject;
 
 import org.assertj.core.api.Assertions;
@@ -49,7 +50,7 @@ public class OperationServiceTest {
 	public void should_MakeADeposit() throws Exception {
 			
 		given(accountService.updateAccount(anyObject())).willReturn(account);
-		given(operationRepository.save(anyObject())).willReturn(operation);
+		given(operationRepository.save(any(Operation.class))).willReturn(operation);
 		
 		
 		Operation operation = operationService.makeADeposit(operationRequest);

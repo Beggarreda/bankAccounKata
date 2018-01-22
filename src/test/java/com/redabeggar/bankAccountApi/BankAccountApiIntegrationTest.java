@@ -53,7 +53,7 @@ public class BankAccountApiIntegrationTest {
 	public void should_MakeADeposit() throws Exception {
 
 		// arrange
-		OperationRequest operationRequest = new OperationRequest(12345L, 1500);
+		OperationRequest operationRequest = new OperationRequest(12345L, 500);
 
 		// act
 		HttpEntity<OperationRequest> request = new HttpEntity<OperationRequest>(operationRequest);

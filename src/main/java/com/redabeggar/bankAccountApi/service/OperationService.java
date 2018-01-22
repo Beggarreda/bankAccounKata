@@ -1,6 +1,7 @@
 package com.redabeggar.bankAccountApi.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.redabeggar.bankAccountApi.model.Account;
 import com.redabeggar.bankAccountApi.model.Operation;
@@ -8,13 +9,16 @@ import com.redabeggar.bankAccountApi.repository.OperationRepository;
 import com.redabeggar.bankAccountApi.utils.OperationRequest;
 import com.redabeggar.bankAccountApi.utils.OperationType;
 
-public class OperationService {
+@Service
+public class OperationService implements IOperationService {
 
 	@Autowired
-	AccountService accountService;
+	IAccountService accountService;
 	@Autowired
 	OperationRepository operationRepository;
 	
+
+	@Override
 	public Operation makeADeposit(OperationRequest operationRequest) {
 		
 		

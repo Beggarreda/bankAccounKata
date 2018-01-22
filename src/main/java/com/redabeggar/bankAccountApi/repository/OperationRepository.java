@@ -1,12 +1,13 @@
 package com.redabeggar.bankAccountApi.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import com.redabeggar.bankAccountApi.model.Operation;
 
-public class OperationRepository {
+@Repository
+public interface OperationRepository extends JpaRepository<Operation, Long> {
 
-	public Operation save(Object anyObject) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 }

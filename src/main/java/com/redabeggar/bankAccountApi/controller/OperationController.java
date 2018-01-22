@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.redabeggar.bankAccountApi.model.Operation;
-import com.redabeggar.bankAccountApi.service.OperationService;
+import com.redabeggar.bankAccountApi.service.IOperationService;
 import com.redabeggar.bankAccountApi.utils.OperationRequest;
 
 
@@ -16,7 +16,7 @@ public class OperationController {
 	
 	
 	@Autowired
-	private OperationService operationService;
+	private IOperationService operationService;
 
 
 	@PostMapping(path = "/deposit", consumes = "application/json", produces = "application/json")

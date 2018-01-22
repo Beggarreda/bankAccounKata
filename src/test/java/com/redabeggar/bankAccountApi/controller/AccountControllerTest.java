@@ -18,7 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.redabeggar.bankAccountApi.model.Account;
-import com.redabeggar.bankAccountApi.service.AccountService;
+import com.redabeggar.bankAccountApi.service.IAccountService;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(AccountController.class)
@@ -28,7 +28,7 @@ public class AccountControllerTest {
 	MockMvc mockMvc;
 
 	@MockBean
-	private AccountService accountService;
+	private IAccountService accountService;
 
 	@Autowired
 	private ObjectMapper mapper;

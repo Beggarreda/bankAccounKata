@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.redabeggar.bankAccountApi.model.Account;
-import com.redabeggar.bankAccountApi.service.AccountService;
+import com.redabeggar.bankAccountApi.service.IAccountService;
 
 
 @RestController
@@ -15,7 +15,7 @@ public class AccountController {
 	
 	
 	@Autowired
-	private AccountService accountService;
+	private IAccountService accountService;
 
 
 	@PostMapping(path = "/account", consumes = "application/json", produces = "application/json")
