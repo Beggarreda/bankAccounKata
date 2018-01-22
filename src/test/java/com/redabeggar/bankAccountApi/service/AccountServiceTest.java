@@ -58,5 +58,15 @@ public class AccountServiceTest {
         assertThat(updated_account.getBalance()).isEqualTo(2000);
     }
     
+    @Test
+    public void should_CreateAnAccount() throws Exception {
+        given(accountRepository.save(any(Account.class))).willReturn(account);
+
+        Account created_account = accountService.createAccount(account);
+
+        assertThat(created_account.getAccountNumber()).isEqualTo(12345);
+        assertThat(created_account.getBalance()).isEqualTo(1500);
+    }
+    
     
 }
