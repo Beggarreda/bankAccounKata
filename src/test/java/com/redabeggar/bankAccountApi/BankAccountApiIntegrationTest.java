@@ -53,7 +53,7 @@ public class BankAccountApiIntegrationTest {
 	public void should_MakeADeposit() throws Exception {
 
 		// arrange
-		OperationRequest operationRequest = new OperationRequest(12345L, 1500);
+		OperationRequest operationRequest = new OperationRequest(12345L, 500);
 
 		// act
 		HttpEntity<OperationRequest> request = new HttpEntity<OperationRequest>(operationRequest);
@@ -63,9 +63,29 @@ public class BankAccountApiIntegrationTest {
 
 		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		Assertions.assertThat(response.getBody().getAccount().getAccountNumber()).isEqualTo(12345);
-		Assertions.assertThat(response.getBody().getAmount()).isEqualTo(1500);
-		Assertions.assertThat(response.getBody().getAccount().getBalance()).isEqualTo(3000);
+		Assertions.assertThat(response.getBody().getAmount()).isEqualTo(500);
+		Assertions.assertThat(response.getBody().getAccount().getBalance()).isEqualTo(2000);
 		Assertions.assertThat(response.getBody().getOperationType()).isEqualTo(OperationType.DEPOSIT);
+
+	}
+	
+	@Test
+	public void should_MakeAWithdraw() throws Exception {
+
+		// arrange
+		OperationRequest operationRequest = new OperationRequest(12345L, 1500);
+
+		// act
+		HttpEntity<OperationRequest> request = new HttpEntity<OperationRequest>(operationRequest);
+		ResponseEntity<Operation> response = restTemplate.exchange("/withdraw", HttpMethod.POST, request, Operation.class);
+
+		// assert
+
+		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		Assertions.assertThat(response.getBody().getAccount().getAccountNumber()).isEqualTo(12345);
+		Assertions.assertThat(response.getBody().getAmount()).isEqualTo(1500);
+		Assertions.assertThat(response.getBody().getAccount().getBalance()).isEqualTo(500);
+		Assertions.assertThat(response.getBody().getOperationType()).isEqualTo(OperationType.WITHDRAW);
 
 	}
 	
