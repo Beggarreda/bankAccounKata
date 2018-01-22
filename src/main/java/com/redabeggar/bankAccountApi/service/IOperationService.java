@@ -9,4 +9,6 @@ public interface IOperationService {
 
 	Operation makeAWithdraw(OperationRequest operationRequest);
 
+	Object makeATransfer(Object anyObject);
+
 }

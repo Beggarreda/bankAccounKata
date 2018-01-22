@@ -39,30 +39,38 @@ public class OperationControllerTest {
 	private OperationRequest operationRequest;
 	private Account account;
 	private Account account2;
-	private Operation operation;
-	private Operation operation2;
+	private Operation deposit_operation;
+	private Operation withdraw_operation;
+	private Operation transfer_operation;
 
 	@Before
 	public void setUp() throws Exception {
 		operationRequest = new OperationRequest(12345L, 500);
-		
-		// Deposit Operation
+
+		// Deposit Operation -balance = 2000-
 		account = new Account(12345L, 1500);
-		operation = new Operation(account, 500, OperationType.DEPOSIT);
-		account.setBalance(account.getBalance() + operation.getAmount());
-		operation.setAccount(account);
-		
-		// Withdraw Operation
-		account2 = new Account(12345L, 1500);
-		operation2 = new Operation(account2, 500, OperationType.WITHDRAW);
-		account2.setBalance(account2.getBalance() - operation2.getAmount());
-		operation2.setAccount(account2);
+		deposit_operation = new Operation(account, 500, OperationType.DEPOSIT);
+		account.setBalance(account.getBalance() + deposit_operation.getAmount());
+		deposit_operation.setAccount(account);
+
+		// Withdraw Operation -balance = 1000-
+		account2 = new Account(6789L, 1500);
+		withdraw_operation = new Operation(account2, 500, OperationType.WITHDRAW);
+		account2.setBalance(account2.getBalance() - withdraw_operation.getAmount());
+		withdraw_operation.setAccount(account2);
+
+		// Transfer Operation 
+		transfer_operation = new Operation(account, account2,800, OperationType.TRANSFERT);
+		account.setBalance(account.getBalance() - transfer_operation.getAmount());
+		account2.setBalance(account2.getBalance() + transfer_operation.getAmount());
+		transfer_operation.setAccount(account);
+		transfer_operation.setPayee(account2);
 	}
 
 	@Test
 	public void should_makeADeposit() throws Exception {
 
-		given(operationService.makeADeposit(anyObject())).willReturn(operation);
+		given(operationService.makeADeposit(anyObject())).willReturn(deposit_operation);
 
 		mockMvc.perform(post("/deposit").contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(operationRequest))).andExpect(status().isOk())
@@ -73,12 +81,26 @@ public class OperationControllerTest {
 	@Test
 	public void should_makeAWithdraw() throws Exception {
 
-		given(operationService.makeAWithdraw(anyObject())).willReturn(operation2);
+		given(operationService.makeAWithdraw(anyObject())).willReturn(withdraw_operation);
 
 		mockMvc.perform(post("/withdraw").contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(operationRequest))).andExpect(status().isOk())
-				.andExpect(jsonPath("account.accountNumber").value(12345))
+				.andExpect(jsonPath("account.accountNumber").value(6789))
 				.andExpect(jsonPath("amount").value(500))
 				.andExpect(jsonPath("account.balance").value(1000));
+	}
+
+	@Test
+	public void should_makeATransfer() throws Exception {
+
+		given(operationService.makeATransfer(anyObject())).willReturn(transfer_operation);
+
+		mockMvc.perform(post("/transfer").contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsString(operationRequest))).andExpect(status().isOk())
+				.andExpect(jsonPath("account.accountNumber").value(12345))
+				.andExpect(jsonPath("payee.accountNumber").value(6789))
+				.andExpect(jsonPath("amount").value(800))
+				.andExpect(jsonPath("account.balance").value(1200))
+				.andExpect(jsonPath("payee.balance").value(1800));
 	}
 }

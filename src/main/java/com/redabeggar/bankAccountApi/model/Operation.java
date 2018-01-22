@@ -55,6 +55,16 @@ public class Operation implements Serializable{
 
 
 
+	public Operation(Account account, Account payee , double amount, OperationType operationType) {
+		super();
+		this.account = account;
+		this.amount = amount;
+		this.operationType = operationType;
+		this.payee = payee;
+	}
+
+
+
 
 	public Long getId() {
 		return id;
