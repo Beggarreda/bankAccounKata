@@ -2,6 +2,7 @@ package com.redabeggar.bankAccountApi.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,6 +62,7 @@ public class OperationService implements IOperationService {
 		List<Operation> transfers = new ArrayList<Operation>();
 		transfers.addAll(operationRepository.findByAccountAccountNumber(accountNumber));
 		transfers.addAll(operationRepository.findByPayeeAccountNumber(accountNumber));
+		transfers= transfers.stream().filter(operation -> operation.getOperationType().equals(OperationType.TRANSFERT)).collect(Collectors.toList());
 		return transfers;
 	}
 

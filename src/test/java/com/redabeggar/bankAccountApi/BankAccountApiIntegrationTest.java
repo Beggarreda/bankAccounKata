@@ -138,7 +138,12 @@ public class BankAccountApiIntegrationTest {
 		ResponseEntity<Operation[]> response = restTemplate.getForEntity("/transfer_history/12345", Operation[].class);
 
 		// assert
+		Operation[] transfers = response.getBody();
 		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		Assertions.assertThat(transfers.length).isEqualTo(1);
+		Assertions.assertThat(transfers[0].getAccount().getAccountNumber()).isEqualTo(12345);
+		Assertions.assertThat(transfers[0].getPayee().getAccountNumber()).isEqualTo(6789);
+		Assertions.assertThat(transfers[0].getOperationType()).isEqualTo(OperationType.TRANSFERT);
 
 	}
 
