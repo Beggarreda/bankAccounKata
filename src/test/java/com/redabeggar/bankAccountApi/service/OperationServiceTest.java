@@ -32,15 +32,25 @@ public class OperationServiceTest {
 	
 	private OperationRequest operationRequest;
 	private Account account;
+	private Account account2;
 	private Operation operation;
+	private Operation operation2;
 
 	@Before
 	public void setUp() throws Exception {
 		operationRequest = new OperationRequest(12345L, 500);
+		
+		// Deposit Operation
 		account = new Account(12345L, 1500);
 		operation = new Operation(account, 500, OperationType.DEPOSIT);
 		account.setBalance(account.getBalance() + operation.getAmount());
 		operation.setAccount(account);
+		
+		// Withdraw Operation
+		account2 = new Account(12345L, 1500);
+		operation2 = new Operation(account2, 500, OperationType.WITHDRAW);
+		account2.setBalance(account2.getBalance() - operation2.getAmount());
+		operation2.setAccount(account2);
 	}
 
 	
@@ -59,5 +69,21 @@ public class OperationServiceTest {
 		Assertions.assertThat(operation.getAccount().getBalance()).isEqualTo(2000);
 		Assertions.assertThat(operation.getAmount()).isEqualTo(500);
 		Assertions.assertThat(operation.getOperationType()).isEqualTo(OperationType.DEPOSIT);
+	}
+	
+	
+	@Test
+	public void should_MakeAWithdraw() throws Exception {
+			
+		given(accountService.updateAccount(anyObject())).willReturn(account2);
+		given(operationRepository.save(any(Operation.class))).willReturn(operation2);
+		
+		
+		Operation operation = operationService.makeAWithdraw(operationRequest);
+
+		Assertions.assertThat(operation.getAccount().getAccountNumber()).isEqualTo(12345);
+		Assertions.assertThat(operation.getAccount().getBalance()).isEqualTo(1000);
+		Assertions.assertThat(operation.getAmount()).isEqualTo(500);
+		Assertions.assertThat(operation.getOperationType()).isEqualTo(OperationType.WITHDRAW);
 	}
 }
