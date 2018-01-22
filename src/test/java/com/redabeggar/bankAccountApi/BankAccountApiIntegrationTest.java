@@ -19,6 +19,7 @@ import com.redabeggar.bankAccountApi.model.Account;
 import com.redabeggar.bankAccountApi.model.Operation;
 import com.redabeggar.bankAccountApi.utils.OperationRequest;
 import com.redabeggar.bankAccountApi.utils.OperationType;
+import com.redabeggar.bankAccountApi.utils.TransferRequest;
 
 
 
@@ -86,6 +87,28 @@ public class BankAccountApiIntegrationTest {
 		Assertions.assertThat(response.getBody().getAmount()).isEqualTo(1050);
 		Assertions.assertThat(response.getBody().getAccount().getBalance()).isEqualTo(950);
 		Assertions.assertThat(response.getBody().getOperationType()).isEqualTo(OperationType.WITHDRAW);
+
+	}
+	
+	@Test
+	public void should_MakeATransfer() throws Exception {
+
+		// arrange
+		TransferRequest transferRequest = new TransferRequest(12345L,6789L,1000 );
+
+		// act
+		HttpEntity<TransferRequest> request = new HttpEntity<TransferRequest>(transferRequest);
+		ResponseEntity<Operation> response = restTemplate.exchange("/transfer", HttpMethod.POST, request, Operation.class);
+
+		// assert
+
+		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+		Assertions.assertThat(response.getBody().getAccount().getAccountNumber()).isEqualTo(12345);
+		Assertions.assertThat(response.getBody().getPayee().getAccountNumber()).isEqualTo(6789);
+		Assertions.assertThat(response.getBody().getAmount()).isEqualTo(1000);
+		Assertions.assertThat(response.getBody().getAccount().getBalance()).isEqualTo(950);
+		Assertions.assertThat(response.getBody().getPayee().getBalance()).isEqualTo(1000);
+		Assertions.assertThat(response.getBody().getOperationType()).isEqualTo(OperationType.TRANSFERT);
 
 	}
 	

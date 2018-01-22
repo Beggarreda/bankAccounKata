@@ -34,6 +34,9 @@ public class Operation implements Serializable{
 	@LastModifiedDate
 	private Date updatDate;
 	private OperationType operationType;
+	@ManyToOne
+    @JoinColumn(name = "payee_account_id")
+	private Account payee;
 	
 	public Operation() {
 		super();
@@ -95,6 +98,13 @@ public class Operation implements Serializable{
 
 
 
+	public Account getPayee() {
+		return payee;
+	}
+
+
+
+
 	public void setId(Long id) {
 		this.id = id;
 	}
@@ -132,6 +142,13 @@ public class Operation implements Serializable{
 
 	public void setOperationType(OperationType operationType) {
 		this.operationType = operationType;
+	}
+
+
+
+
+	public void setPayee(Account payee) {
+		this.payee = payee;
 	}
 
 
