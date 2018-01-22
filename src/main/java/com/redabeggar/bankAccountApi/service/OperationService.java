@@ -29,4 +29,11 @@ public class OperationService implements IOperationService {
 		return operation;
 	}
 
+
+	@Override
+	public Operation makeAWithdraw(Object anyObject) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
