@@ -1,9 +1,9 @@
 package com.redabeggar.bankAccountApi.controller;
 
+import com.redabeggar.bankAccountApi.exception.AccountAlreadyExistException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 
 import com.redabeggar.bankAccountApi.model.Account;
 import com.redabeggar.bankAccountApi.service.IAccountService;
@@ -22,6 +22,12 @@ public class AccountController {
 	public Account createDeposit(@RequestBody Account account) {
 
 		return accountService.createAccount(account);
+
+	}
+
+	@ExceptionHandler
+	@ResponseStatus(HttpStatus.ALREADY_REPORTED)
+	private void AccountAlreadyExistHandler(AccountAlreadyExistException e){
 
 	}
 }
