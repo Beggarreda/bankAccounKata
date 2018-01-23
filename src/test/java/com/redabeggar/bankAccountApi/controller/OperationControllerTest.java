@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.redabeggar.bankAccountApi.exception.AccountNotFoundException;
+import com.redabeggar.bankAccountApi.exception.AmountNotValidException;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -44,6 +45,7 @@ public class OperationControllerTest {
 	private ObjectMapper mapper;
 
 	private OperationRequest operationRequest;
+	private OperationRequest operationRequest2;
 	private Account account;
 	private Account account2;
 	private Operation deposit_operation;
@@ -55,6 +57,7 @@ public class OperationControllerTest {
 	@Before
 	public void setUp() throws Exception {
 		operationRequest = new OperationRequest(12345L, 500);
+		operationRequest2 = new OperationRequest(12345L, -200);
 
 		// Deposit Operation -balance = 2000-
 		account = new Account(12345L, 1500);
@@ -149,5 +152,17 @@ public class OperationControllerTest {
 				.content(mapper.writeValueAsString(operationRequest))
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isNotFound());
+	}
+
+	@Test
+	public void deposit_should_ReturnAmountNotValidException() throws Exception {
+
+		given(operationService.makeADeposit(anyObject())).willThrow(new AmountNotValidException("Bad Request ! amount's value is not valid"));
+
+		mockMvc.perform(post("/deposit").contentType(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsString(operationRequest2))
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest());
 	}
 }
