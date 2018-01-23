@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.redabeggar.bankAccountApi.exception.AccountAlreadyExistException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,4 +52,15 @@ public class AccountControllerTest {
 				.andExpect(jsonPath("accountNumber").value(12345))
 				.andExpect(jsonPath("balance").value(1500));
 	}
+
+	@Test
+	public void should_ReturnAccountAlreadyExistException() throws Exception {
+		String json = mapper.writeValueAsString(account);
+		given(accountService.createAccount(anyObject())).willThrow(new AccountAlreadyExistException("Account already exist"));
+
+		mockMvc.perform(post("/account").contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsString(account)))
+				.andExpect(status().isAlreadyReported());
+	}
+
 }
