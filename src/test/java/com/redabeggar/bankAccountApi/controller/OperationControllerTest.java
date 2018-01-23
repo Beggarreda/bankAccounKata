@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.List;
 
+import com.redabeggar.bankAccountApi.exception.AccountNotFoundException;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -136,5 +137,17 @@ public class OperationControllerTest {
 				.andExpect(jsonPath("$[0].amount").value(500))
 				.andExpect(jsonPath("$[0].operationType").value("TRANSFERT"));
 				
+	}
+
+	@Test
+	public void makeADeposit_should_ReturnAccountNotFoundException() throws Exception {
+
+		given(operationService.makeADeposit(anyObject())).willThrow(new AccountNotFoundException("Error making a Deposit : Account Not Found"));
+
+		mockMvc.perform(post("/deposit").contentType(MediaType.APPLICATION_JSON)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsString(operationRequest))
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNotFound());
 	}
 }
