@@ -10,18 +10,19 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import com.redabeggar.bankAccountApi.utils.OperationType;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class Operation implements Serializable{
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -38,12 +39,7 @@ public class Operation implements Serializable{
     @JoinColumn(name = "payee_account_id")
 	private Account payee;
 	
-	public Operation() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	
-	
+
 
 
 	public Operation(Account account, double amount, OperationType operationType) {
@@ -64,102 +60,6 @@ public class Operation implements Serializable{
 	}
 
 
-
-
-	public Long getId() {
-		return id;
-	}
-
-
-
-
-	public Account getAccount() {
-		return account;
-	}
-
-
-
-
-	public double getAmount() {
-		return amount;
-	}
-
-
-
-
-	public Date getCreationDate() {
-		return creationDate;
-	}
-
-
-
-
-	public Date getUpdatDate() {
-		return updatDate;
-	}
-
-
-
-
-	public OperationType getOperationType() {
-		return operationType;
-	}
-
-
-
-
-	public Account getPayee() {
-		return payee;
-	}
-
-
-
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-
-
-
-	public void setAccount(Account account) {
-		this.account = account;
-	}
-
-
-
-
-	public void setAmount(double amount) {
-		this.amount = amount;
-	}
-
-
-
-
-	public void setCreationDate(Date creationDate) {
-		this.creationDate = creationDate;
-	}
-
-
-
-
-	public void setUpdatDate(Date updatDate) {
-		this.updatDate = updatDate;
-	}
-
-
-
-
-	public void setOperationType(OperationType operationType) {
-		this.operationType = operationType;
-	}
-
-
-
-
-	public void setPayee(Account payee) {
-		this.payee = payee;
-	}
 
 
 
