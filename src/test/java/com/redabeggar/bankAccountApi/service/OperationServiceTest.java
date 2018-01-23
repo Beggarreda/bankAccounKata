@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.redabeggar.bankAccountApi.exception.AccountNotFoundException;
+import com.redabeggar.bankAccountApi.exception.AmountNotValidException;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -147,6 +148,14 @@ public class OperationServiceTest {
 	@Test(expected = AccountNotFoundException.class)
 	public void makeADeposit_should_ReturnAccountNotFoundException() throws Exception {
 		given(accountService.updateAccount_when_deposit(anyObject())).willThrow(new AccountNotFoundException("Error making a Deposit : Account Not Found"));
+
+		Operation operation = operationService.makeADeposit(operationRequest);
+
+	}
+
+	@Test(expected = AmountNotValidException.class)
+	public void makeADeposit_should_ReturnAmounttNotValidException() throws Exception {
+		given(accountService.updateAccount_when_deposit(anyObject())).willThrow(new AmountNotValidException("Error making a Deposit : Amount Not Valid"));
 
 		Operation operation = operationService.makeADeposit(operationRequest);
 
