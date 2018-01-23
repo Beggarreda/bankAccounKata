@@ -11,6 +11,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -30,9 +32,9 @@ public class Operation implements Serializable{
     @JoinColumn(name = "account_id")
 	private Account account;
 	private double amount;
-	@CreatedDate
+	@CreationTimestamp
 	private Date creationDate;
-	@LastModifiedDate
+	@UpdateTimestamp
 	private Date updatDate;
 	private OperationType operationType;
 	@ManyToOne

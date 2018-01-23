@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -27,9 +29,9 @@ public class Account implements Serializable {
     private Long accountNumber;
     @NonNull
     private double balance;
-    @CreatedDate
+    @CreationTimestamp
     private Date creationDate;
-    @LastModifiedDate
+    @UpdateTimestamp
     private Date updateDate;
     @Getter(onMethod = @__( @JsonIgnore ))
     @Setter
