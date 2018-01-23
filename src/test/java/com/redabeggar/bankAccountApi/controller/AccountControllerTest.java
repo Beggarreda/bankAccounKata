@@ -54,7 +54,7 @@ public class AccountControllerTest {
 	}
 
 	@Test
-	public void should_ReturnAccountAlreadyExistException() throws Exception {
+	public void createAccount_should_ReturnAccountAlreadyExistException() throws Exception {
 		String json = mapper.writeValueAsString(account);
 		given(accountService.createAccount(anyObject())).willThrow(new AccountAlreadyExistException("Account already exist"));
 

@@ -5,6 +5,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 
+import com.redabeggar.bankAccountApi.exception.AccountAlreadyExistException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -77,6 +78,12 @@ public class AccountServiceTest {
 
         assertThat(created_account.getAccountNumber()).isEqualTo(12345);
         assertThat(created_account.getBalance()).isEqualTo(1500);
+    }
+
+    @Test(expected = AccountAlreadyExistException.class)
+    public void createAccount__should_ReturnAccountAlreadyExistException(){
+        given(accountRepository.findOne(anyLong())).willReturn(account);
+        Account saved_account = accountService.createAccount(account);
     }
     
     
