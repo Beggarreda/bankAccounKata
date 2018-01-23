@@ -3,6 +3,7 @@ package com.redabeggar.bankAccountApi.controller;
 import java.util.List;
 
 import com.redabeggar.bankAccountApi.exception.AccountNotFoundException;
+import com.redabeggar.bankAccountApi.exception.AmountNotValidException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -52,6 +53,12 @@ public class OperationController {
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	private void AccountNotFoundHandler(AccountNotFoundException e){
+
+	}
+
+	@ExceptionHandler
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	private void AmountMinMaxValueHandler(AmountNotValidException e){
 
 	}
 }
