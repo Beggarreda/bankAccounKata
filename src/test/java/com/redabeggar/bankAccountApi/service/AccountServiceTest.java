@@ -4,8 +4,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.anyObject;
 
 import com.redabeggar.bankAccountApi.exception.AccountAlreadyExistException;
+import com.redabeggar.bankAccountApi.exception.AccountNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -85,6 +87,13 @@ public class AccountServiceTest {
         given(accountRepository.findOne(anyLong())).willReturn(account);
         Account saved_account = accountService.createAccount(account);
     }
-    
-    
+
+
+    @Test(expected = AccountNotFoundException.class)
+    public void updateAccount_should_ReturnAccountNotFoundException() throws Exception {
+        given(accountRepository.findOne(anyLong())).willReturn(null);
+        Account saved_account = accountService.updateAccount_when_deposit(operationRequest);
+    }
+
+
 }

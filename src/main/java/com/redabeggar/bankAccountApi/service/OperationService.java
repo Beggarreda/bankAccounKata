@@ -25,8 +25,8 @@ public class OperationService implements IOperationService {
 
 	@Override
 	public Operation makeADeposit(OperationRequest operationRequest) {
-		
-		
+
+
 		Account account = accountService.updateAccount_when_deposit(operationRequest);
 		Operation operation = new Operation(account, operationRequest.getAmount(), OperationType.DEPOSIT);
 		operationRepository.save(operation);

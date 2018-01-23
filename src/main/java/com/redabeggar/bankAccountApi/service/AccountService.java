@@ -31,7 +31,7 @@ private AccountRepository accountRepository;
 	            throw new AccountNotFoundException("Account Not Found");
 		 else if(operationRequest.getAmount() <= 0)
 			 throw new AmountNotValidException("Not Valid Amount ");
-		 
+
 		 account.setBalance(account.getBalance() + operationRequest.getAmount());
 
 	        return accountRepository.save(account);
