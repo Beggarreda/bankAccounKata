@@ -8,6 +8,7 @@ import static org.mockito.Matchers.anyObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.redabeggar.bankAccountApi.exception.AccountNotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;
@@ -141,5 +142,13 @@ public class OperationServiceTest {
 		Assertions.assertThat(operations.get(0).getAccount().getBalance()).isEqualTo(1200);
 		Assertions.assertThat(operations.get(1).getAmount()).isEqualTo(900);
 		Assertions.assertThat(operations.get(2).getOperationType()).isEqualTo(OperationType.TRANSFERT);
+	}
+
+	@Test(expected = AccountNotFoundException.class)
+	public void makeADeposit_should_ReturnAccountNotFoundException() throws Exception {
+		given(accountService.updateAccount_when_deposit(anyObject())).willThrow(new AccountNotFoundException("Error making a Deposit : Account Not Found"));
+
+		Operation operation = operationService.makeADeposit(operationRequest);
+
 	}
 }
