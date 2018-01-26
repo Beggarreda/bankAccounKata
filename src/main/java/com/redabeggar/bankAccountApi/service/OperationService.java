@@ -24,10 +24,10 @@ public class OperationService implements IOperationService {
 	
 
 	@Override
-	public Operation makeADeposit(OperationRequest operationRequest) {
+	public Operation deposit(OperationRequest operationRequest) {
 
 
-		Account account = accountService.updateAccount_when_deposit(operationRequest);
+		Account account = accountService.update_when_deposit(operationRequest);
 		Operation operation = new Operation(account, operationRequest.getAmount(), OperationType.DEPOSIT);
 		operationRepository.save(operation);
 		
@@ -36,8 +36,8 @@ public class OperationService implements IOperationService {
 
 
 	@Override
-	public Operation makeAWithdraw(OperationRequest operationRequest) {
-		Account account = accountService.updateAccount_when_withdraw(operationRequest);
+	public Operation withdraw(OperationRequest operationRequest) {
+		Account account = accountService.update_when_withdraw(operationRequest);
 		Operation operation = new Operation(account, operationRequest.getAmount(), OperationType.WITHDRAW);
 		operationRepository.save(operation);
 		
@@ -46,10 +46,10 @@ public class OperationService implements IOperationService {
 
 
 	@Override
-	public Operation makeATransfer(TransferRequest transferRequest) {
+	public Operation transfer(TransferRequest transferRequest) {
 		OperationRequest payeeRequest = new OperationRequest(transferRequest.getPayeeAccountNumber(), transferRequest.getAmount());;
-		Account account = accountService.updateAccount_when_withdraw(transferRequest);
-		Account account2 = accountService.updateAccount_when_deposit(payeeRequest);
+		Account account = accountService.update_when_withdraw(transferRequest);
+		Account account2 = accountService.update_when_deposit(payeeRequest);
 		Operation operation = new Operation(account, account2,transferRequest.getAmount(), OperationType.TRANSFERT);
 		operationRepository.save(operation);
 		

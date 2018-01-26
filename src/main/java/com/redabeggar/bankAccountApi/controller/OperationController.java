@@ -26,21 +26,21 @@ public class OperationController {
 	@PostMapping(path = "/deposit", consumes = "application/json", produces = "application/json")
 	public Operation createDeposit(@RequestBody OperationRequest operationRequest) {
 
-		return operationService.makeADeposit(operationRequest);
+		return operationService.deposit(operationRequest);
 
 	}
 	
 	@PostMapping(path = "/withdraw", consumes = "application/json", produces = "application/json")
 	public Operation createWithdraw(@RequestBody OperationRequest operationRequest) {
 
-		return operationService.makeAWithdraw(operationRequest);
+		return operationService.withdraw(operationRequest);
 
 	}
 
 	@PostMapping(path = "/transfer", consumes = "application/json", produces = "application/json")
 	public Operation createTransfer(@RequestBody TransferRequest transferRequest) {
 
-		return operationService.makeATransfer(transferRequest);
+		return operationService.transfer(transferRequest);
 
 	}
 	

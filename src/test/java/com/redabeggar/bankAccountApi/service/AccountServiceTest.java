@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
-import static org.mockito.Matchers.anyObject;
 
 import com.redabeggar.bankAccountApi.exception.AccountAlreadyExistException;
 import com.redabeggar.bankAccountApi.exception.AccountNotFoundException;
@@ -21,8 +20,8 @@ import com.redabeggar.bankAccountApi.utils.OperationRequest;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AccountServiceTest {
-   
-	@Mock
+
+    @Mock
     private AccountRepository accountRepository;
 
 
@@ -31,7 +30,7 @@ public class AccountServiceTest {
 
     OperationRequest operationRequest;
     Account account;
-    
+
 
 
     @Before
@@ -41,64 +40,64 @@ public class AccountServiceTest {
     }
 
     @Test
-    public void should_returnAnAccount(){
+    public void Should_Return_Account(){
         given(accountRepository.findOne(anyLong())).willReturn(account);
 
-        Account account = accountService.getAccount(12345L);
+        Account account = accountService.getByAccountNumber(12345L);
 
         assertThat(account.getAccountNumber()).isEqualTo(12345);
         assertThat(account.getBalance()).isEqualTo(1500);
     }
-    
+
     @Test
-    public void should_UpdateAnAccount() throws Exception {
+    public void Should_Update_Account_When_Deposit() throws Exception {
         given(accountRepository.findOne(anyLong())).willReturn(account);
         given(accountRepository.save(any(Account.class))).willReturn(account);
 
-        Account updated_account = accountService.updateAccount_when_deposit(operationRequest);
+        Account updated_account = accountService.update_when_deposit(operationRequest);
 
         assertThat(updated_account.getAccountNumber()).isEqualTo(12345);
         assertThat(updated_account.getBalance()).isEqualTo(2000);
     }
-    
+
     @Test
-    public void should_UpdateAnAccount_when_withdraw() throws Exception {
+    public void Should_Update_Account_When_Withdraw() throws Exception {
         given(accountRepository.findOne(anyLong())).willReturn(account);
         given(accountRepository.save(any(Account.class))).willReturn(account);
 
-        Account updated_account = accountService.updateAccount_when_withdraw(operationRequest);
+        Account updated_account = accountService.update_when_withdraw(operationRequest);
 
         assertThat(updated_account.getAccountNumber()).isEqualTo(12345);
         assertThat(updated_account.getBalance()).isEqualTo(1000);
     }
-    
+
     @Test
-    public void should_CreateAnAccount() throws Exception {
+    public void Should_Create_Account() throws Exception {
         given(accountRepository.save(any(Account.class))).willReturn(account);
 
-        Account created_account = accountService.createAccount(account);
+        Account created_account = accountService.create(account);
 
         assertThat(created_account.getAccountNumber()).isEqualTo(12345);
         assertThat(created_account.getBalance()).isEqualTo(1500);
     }
 
     @Test(expected = AccountAlreadyExistException.class)
-    public void createAccount__should_ReturnAccountAlreadyExistException(){
+    public void Should_Throw_account_Already_Exist_Exception_When_Creating_Account(){
         given(accountRepository.findOne(anyLong())).willReturn(account);
-        Account saved_account = accountService.createAccount(account);
+        Account saved_account = accountService.create(account);
     }
 
     @Test(expected = AccountNotFoundException.class)
-    public void GetAccount_should_ReturnAccountNotFoundException() throws Exception {
+    public void Should_Throw_Account_Not_Found_Exception_When_Geting_Account() throws Exception {
         given(accountRepository.findOne(anyLong())).willReturn(null);
-        Account get_account = accountService.getAccount(12345);
+        Account get_account = accountService.getByAccountNumber(12345);
     }
 
 
     @Test(expected = AccountNotFoundException.class)
-    public void updateAccount_should_ReturnAccountNotFoundException() throws Exception {
+    public void Should_Throw_Account_Not_Found_Exception_When_Updating_Account() throws Exception {
         given(accountRepository.findOne(anyLong())).willReturn(null);
-        Account saved_account = accountService.updateAccount_when_deposit(operationRequest);
+        Account saved_account = accountService.update_when_deposit(operationRequest);
     }
 
 

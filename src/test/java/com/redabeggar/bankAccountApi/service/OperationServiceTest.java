@@ -85,12 +85,12 @@ public class OperationServiceTest {
 	}
 
 	@Test
-	public void should_MakeADeposit() throws Exception {
+	public void Should_Make_A_Deposit() throws Exception {
 
-		given(accountService.updateAccount_when_deposit(anyObject())).willReturn(account);
+		given(accountService.update_when_deposit(anyObject())).willReturn(account);
 		given(operationRepository.save(any(Operation.class))).willReturn(deposit_operation);
 
-		Operation operation = operationService.makeADeposit(operationRequest);
+		Operation operation = operationService.deposit(operationRequest);
 
 		Assertions.assertThat(operation.getAccount().getAccountNumber()).isEqualTo(12345);
 		Assertions.assertThat(operation.getAccount().getBalance()).isEqualTo(1200);
@@ -99,12 +99,12 @@ public class OperationServiceTest {
 	}
 
 	@Test
-	public void should_MakeAWithdraw() throws Exception {
+	public void Should_Make_A_Withdraw() throws Exception {
 
-		given(accountService.updateAccount_when_withdraw(anyObject())).willReturn(account2);
+		given(accountService.update_when_withdraw(anyObject())).willReturn(account2);
 		given(operationRepository.save(any(Operation.class))).willReturn(withdraw_operation);
 
-		Operation operation = operationService.makeAWithdraw(operationRequest);
+		Operation operation = operationService.withdraw(operationRequest);
 
 		Assertions.assertThat(operation.getAccount().getAccountNumber()).isEqualTo(6789);
 		Assertions.assertThat(operation.getAccount().getBalance()).isEqualTo(1800);
@@ -113,13 +113,13 @@ public class OperationServiceTest {
 	}
 
 	@Test
-	public void should_MakeATransfer() throws Exception {
+	public void Should_Make_A_Transfer() throws Exception {
 
-		given(accountService.updateAccount_when_withdraw(anyObject())).willReturn(account);
-		given(accountService.updateAccount_when_deposit(anyObject())).willReturn(account2);
+		given(accountService.update_when_withdraw(anyObject())).willReturn(account);
+		given(accountService.update_when_deposit(anyObject())).willReturn(account2);
 		given(operationRepository.save(any(Operation.class))).willReturn(transfer_operation);
 
-		Operation operation = operationService.makeATransfer(transferRequest);
+		Operation operation = operationService.transfer(transferRequest);
 
 		Assertions.assertThat(operation.getAccount().getAccountNumber()).isEqualTo(12345);
 		Assertions.assertThat(operation.getPayee().getAccountNumber()).isEqualTo(6789);
@@ -130,7 +130,7 @@ public class OperationServiceTest {
 	}
 
 	@Test
-	public void should_getTransferHistory() throws Exception {
+	public void Should_Get_Transfer_History() throws Exception {
 
 		given(operationRepository.findByAccountAccountNumber(anyLong())).willReturn(list_transfer_operation);
 		given(operationRepository.findByPayeeAccountNumber(anyLong())).willReturn(list_transfer_operation2);
@@ -146,18 +146,18 @@ public class OperationServiceTest {
 	}
 
 	@Test(expected = AccountNotFoundException.class)
-	public void makeADeposit_should_ReturnAccountNotFoundException() throws Exception {
-		given(accountService.updateAccount_when_deposit(anyObject())).willThrow(new AccountNotFoundException("Error making a Deposit : Account Not Found"));
+	public void Should_Throw_Account_Not_Found_Exception_When_Making_Deposit() throws Exception {
+		given(accountService.update_when_deposit(anyObject())).willThrow(new AccountNotFoundException("Error making a Deposit : Account Not Found"));
 
-		Operation operation = operationService.makeADeposit(operationRequest);
+		Operation operation = operationService.deposit(operationRequest);
 
 	}
 
 	@Test(expected = AmountNotValidException.class)
-	public void makeADeposit_should_ReturnAmounttNotValidException() throws Exception {
-		given(accountService.updateAccount_when_deposit(anyObject())).willThrow(new AmountNotValidException("Error making a Deposit : Amount Not Valid"));
+	public void Should_Throw_Amount_Not_Valid_Exception_When_Making_Deposit() throws Exception {
+		given(accountService.update_when_deposit(anyObject())).willThrow(new AmountNotValidException("Error making a Deposit : Amount Not Valid"));
 
-		Operation operation = operationService.makeADeposit(operationRequest);
+		Operation operation = operationService.deposit(operationRequest);
 
 	}
 }

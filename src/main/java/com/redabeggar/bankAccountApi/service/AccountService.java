@@ -18,14 +18,16 @@ private AccountRepository accountRepository;
 
 	
 	@Override
-	public Account getAccount(long accountNumber) {
-
-		return accountRepository.findOne(accountNumber);
+	public Account getByAccountNumber(long accountNumber) {
+		Account account = accountRepository.findOne(accountNumber);
+		if(account == null)
+			throw new AccountNotFoundException("Account Not Found");
+		return account;
 	}
 
 	
 	@Override
-	public Account updateAccount_when_deposit(OperationRequest operationRequest) {
+	public Account update_when_deposit(OperationRequest operationRequest) {
 		Account account = accountRepository.findOne(operationRequest.getAccountNumber());
 		 if(account == null)
 	            throw new AccountNotFoundException("Account Not Found");
@@ -39,7 +41,7 @@ private AccountRepository accountRepository;
 
 
 	@Override
-	public Account createAccount(Account account) {
+	public Account create(Account account) {
 		
 		 if(accountRepository.findOne(account.getAccountNumber()) != null)
 	            throw new AccountAlreadyExistException("Account Already Exist");
@@ -49,7 +51,7 @@ private AccountRepository accountRepository;
 
 
 	@Override
-	public Account updateAccount_when_withdraw(OperationRequest operationRequest) {
+	public Account update_when_withdraw(OperationRequest operationRequest) {
 		Account account = accountRepository.findOne(operationRequest.getAccountNumber());
 		 if(account == null)
 	            throw new AccountNotFoundException("Account Not Found");

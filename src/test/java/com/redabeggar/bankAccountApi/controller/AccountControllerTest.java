@@ -45,7 +45,7 @@ public class AccountControllerTest {
 	@Test
 	public void should_createAccount() throws Exception {
 
-		given(accountService.createAccount(anyObject())).willReturn(account);
+		given(accountService.create(anyObject())).willReturn(account);
 		
 		mockMvc.perform(post("/account").contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(account))).andExpect(status().isOk())
@@ -56,7 +56,7 @@ public class AccountControllerTest {
 	@Test
 	public void createAccount_should_ReturnAccountAlreadyExistException() throws Exception {
 		String json = mapper.writeValueAsString(account);
-		given(accountService.createAccount(anyObject())).willThrow(new AccountAlreadyExistException("Account already exist"));
+		given(accountService.create(anyObject())).willThrow(new AccountAlreadyExistException("Account already exist"));
 
 		mockMvc.perform(post("/account").contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(account)))

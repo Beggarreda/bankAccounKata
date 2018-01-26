@@ -8,11 +8,11 @@ import com.redabeggar.bankAccountApi.utils.TransferRequest;
 
 public interface IOperationService {
 
-	Operation makeADeposit(OperationRequest operationRequest);
+	Operation deposit(OperationRequest operationRequest);
 
-	Operation makeAWithdraw(OperationRequest operationRequest);
+	Operation withdraw(OperationRequest operationRequest);
 
-	Operation makeATransfer(TransferRequest transferRequest);
+	Operation transfer(TransferRequest transferRequest);
 
 	List<Operation> getTransferHistory(long anyLong);
 

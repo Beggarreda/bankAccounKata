@@ -21,7 +21,7 @@ public class AccountController {
 	@PostMapping(path = "/account", consumes = "application/json", produces = "application/json")
 	public Account createDeposit(@RequestBody Account account) {
 
-		return accountService.createAccount(account);
+		return accountService.create(account);
 
 	}
 

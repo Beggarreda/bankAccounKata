@@ -89,7 +89,7 @@ public class OperationControllerTest {
 	@Test
 	public void should_makeADeposit() throws Exception {
 
-		given(operationService.makeADeposit(anyObject())).willReturn(deposit_operation);
+		given(operationService.deposit(anyObject())).willReturn(deposit_operation);
 
 		mockMvc.perform(post("/deposit").contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(operationRequest))).andExpect(status().isOk())
@@ -101,7 +101,7 @@ public class OperationControllerTest {
 	@Test
 	public void should_makeAWithdraw() throws Exception {
 
-		given(operationService.makeAWithdraw(anyObject())).willReturn(withdraw_operation);
+		given(operationService.withdraw(anyObject())).willReturn(withdraw_operation);
 
 		mockMvc.perform(post("/withdraw").contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(operationRequest))).andExpect(status().isOk())
@@ -113,7 +113,7 @@ public class OperationControllerTest {
 	@Test
 	public void should_makeATransfer() throws Exception {
 
-		given(operationService.makeATransfer(anyObject())).willReturn(transfer_operation);
+		given(operationService.transfer(anyObject())).willReturn(transfer_operation);
 
 		mockMvc.perform(post("/transfer").contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsString(operationRequest))).andExpect(status().isOk())
@@ -145,7 +145,7 @@ public class OperationControllerTest {
 	@Test
 	public void makeADeposit_should_ReturnAccountNotFoundException() throws Exception {
 
-		given(operationService.makeADeposit(anyObject())).willThrow(new AccountNotFoundException("Error making a Deposit : Account Not Found"));
+		given(operationService.deposit(anyObject())).willThrow(new AccountNotFoundException("Error making a Deposit : Account Not Found"));
 
 		mockMvc.perform(post("/deposit").contentType(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
@@ -157,7 +157,7 @@ public class OperationControllerTest {
 	@Test
 	public void deposit_should_ReturnAmountNotValidException() throws Exception {
 
-		given(operationService.makeADeposit(anyObject())).willThrow(new AmountNotValidException("Bad Request ! amount's value is not valid"));
+		given(operationService.deposit(anyObject())).willThrow(new AmountNotValidException("Bad Request ! amount's value is not valid"));
 
 		mockMvc.perform(post("/deposit").contentType(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)
