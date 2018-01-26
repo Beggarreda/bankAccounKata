@@ -10,6 +10,7 @@ import com.redabeggar.bankAccountApi.model.Operation;
 @Repository
 public interface OperationRepository extends JpaRepository<Operation, Long> {
 
+
 	List<Operation> findByAccountAccountNumber(long anyLong);
 
 	List<Operation> findByPayeeAccountNumber(long anyLong);

@@ -88,6 +88,12 @@ public class AccountServiceTest {
         Account saved_account = accountService.createAccount(account);
     }
 
+    @Test(expected = AccountNotFoundException.class)
+    public void GetAccount_should_ReturnAccountNotFoundException() throws Exception {
+        given(accountRepository.findOne(anyLong())).willReturn(null);
+        Account get_account = accountService.getAccount(12345);
+    }
+
 
     @Test(expected = AccountNotFoundException.class)
     public void updateAccount_should_ReturnAccountNotFoundException() throws Exception {
