@@ -30,7 +30,7 @@ public class BankAccountApiIntegrationTest {
 	TestRestTemplate restTemplate;
 
 	@Test
-	public void should_CreateAnAccount() throws Exception {
+	public void Stage1_should_CreateAnAccount() throws Exception {
 
 		// arrange
 		Account account = new Account(12345L, 1500);
@@ -48,7 +48,7 @@ public class BankAccountApiIntegrationTest {
 	}
 
 	@Test
-	public void should_CreateAnOtherAccount() throws Exception {
+	public void Stage2_should_CreateAnOtherAccount() throws Exception {
 
 		// arrange
 		Account account = new Account(6789L, 1600);
@@ -66,7 +66,7 @@ public class BankAccountApiIntegrationTest {
 	}
 
 	@Test
-	public void should_MakeADeposit() throws Exception {
+	public void Stage3_should_MakeADeposit() throws Exception {
 
 		// arrange
 		OperationRequest operationRequest = new OperationRequest(12345L, 500);
@@ -87,7 +87,7 @@ public class BankAccountApiIntegrationTest {
 	}
 
 	@Test
-	public void should_MakeAWithdraw() throws Exception {
+	public void Stage4_should_MakeAWithdraw() throws Exception {
 
 		// arrange
 		OperationRequest operationRequest = new OperationRequest(6789L, 1000);
@@ -102,13 +102,13 @@ public class BankAccountApiIntegrationTest {
 		Assertions.assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
 		Assertions.assertThat(response.getBody().getAccount().getAccountNumber()).isEqualTo(6789);
 		Assertions.assertThat(response.getBody().getAmount()).isEqualTo(1000);
-		Assertions.assertThat(response.getBody().getAccount().getBalance()).isEqualTo(1400);
+		Assertions.assertThat(response.getBody().getAccount().getBalance()).isEqualTo(600);
 		Assertions.assertThat(response.getBody().getOperationType()).isEqualTo(OperationType.WITHDRAW);
 
 	}
 
 	@Test
-	public void should_MakeATransfer() throws Exception {
+	public void Stage5_should_MakeATransfer() throws Exception {
 
 		// arrange
 		TransferRequest transferRequest = new TransferRequest(12345L, 6789L, 800);
@@ -125,13 +125,13 @@ public class BankAccountApiIntegrationTest {
 		Assertions.assertThat(response.getBody().getPayee().getAccountNumber()).isEqualTo(6789);
 		Assertions.assertThat(response.getBody().getAmount()).isEqualTo(800);
 		Assertions.assertThat(response.getBody().getAccount().getBalance()).isEqualTo(1200);
-		Assertions.assertThat(response.getBody().getPayee().getBalance()).isEqualTo(2400);
+		Assertions.assertThat(response.getBody().getPayee().getBalance()).isEqualTo(1400);
 		Assertions.assertThat(response.getBody().getOperationType()).isEqualTo(OperationType.TRANSFERT);
 
 	}
 
 	@Test
-	public void should_getTransferHistory() throws Exception {
+	public void Stage6_should_getTransferHistory() throws Exception {
 		// arrange
 
 		// act
