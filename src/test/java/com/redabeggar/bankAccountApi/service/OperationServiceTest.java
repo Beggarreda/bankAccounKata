@@ -179,4 +179,46 @@ public class OperationServiceTest {
 		Operation operation = operationService.withdraw(operationRequest);
 
 	}
+
+	@Test(expected = AccountNotFoundException.class)
+	public void Should_Throw_Payer_Account_Not_Found_Exception_When_Making_Transfer() throws Exception {
+		given(accountService.getByAccountNumber(account.getAccountNumber())).willThrow(new AccountNotFoundException("Error making a Transfer : Payer Account Not Found"));
+		given(accountService.getByAccountNumber(account2.getAccountNumber())).willReturn(account2);
+		given(operationRepository.save(any(Operation.class))).willReturn(transfer_operation);
+
+		Operation operation = operationService.transfer(transferRequest);
+
+	}
+
+	@Test(expected = AccountNotFoundException.class)
+	public void Should_Throw_Payee_Account_Not_Found_Exception_When_Making_Transfer() throws Exception {
+		given(accountService.getByAccountNumber(account.getAccountNumber())).willReturn(account);
+		given(accountService.getByAccountNumber(account2.getAccountNumber())).willThrow(new AccountNotFoundException("Error making a Transfer : Payee Account Not Found"));
+		given(operationRepository.save(any(Operation.class))).willReturn(transfer_operation);
+
+		Operation operation = operationService.transfer(transferRequest);
+
+	}
+
+	@Test(expected = AmountNotValidException.class)
+	public void Should_Throw_Withdrawal_Amount_Not_Valid_Exception_When_Making_Transfer() throws Exception {
+		given(accountService.getByAccountNumber(account.getAccountNumber())).willReturn(account);
+		given(accountService.getByAccountNumber(account2.getAccountNumber())).willReturn(account2);
+		transferRequest.setAmount(4000);
+		given(operationRepository.save(any(Operation.class))).willReturn(transfer_operation);
+
+		Operation operation = operationService.transfer(transferRequest);
+
+	}
+
+	@Test(expected = AmountNotValidException.class)
+	public void Should_Throw_Deposit_Amount_Not_Valid_Exception_When_Making_Transfer() throws Exception {
+		given(accountService.getByAccountNumber(account.getAccountNumber())).willReturn(account);
+		given(accountService.getByAccountNumber(account2.getAccountNumber())).willReturn(account2);
+		transferRequest.setAmount(-100);
+		given(operationRepository.save(any(Operation.class))).willReturn(transfer_operation);
+
+		Operation operation = operationService.transfer(transferRequest);
+
+	}
 }
