@@ -163,4 +163,20 @@ public class OperationServiceTest {
 		Operation operation = operationService.deposit(operationRequest);
 
 	}
+
+	@Test(expected = AccountNotFoundException.class)
+	public void Should_Throw_Account_Not_Found_Exception_When_Making_Withdraw() throws Exception {
+		given(accountService.getByAccountNumber(anyLong())).willThrow(new AccountNotFoundException("Error making a Withdraw : Account Not Found"));
+
+		Operation operation = operationService.withdraw(operationRequest);
+
+	}
+
+	@Test(expected = AmountNotValidException.class)
+	public void Should_Throw_Amount_Not_Valid_Exception_When_Making_Withdraw() throws Exception {
+		given(accountService.getByAccountNumber(anyLong())).willReturn(account);
+		operationRequest.setAmount(3000);
+		Operation operation = operationService.withdraw(operationRequest);
+
+	}
 }
