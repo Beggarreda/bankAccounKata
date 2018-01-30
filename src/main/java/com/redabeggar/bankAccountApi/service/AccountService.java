@@ -27,14 +27,10 @@ private AccountRepository accountRepository;
 
 	
 	@Override
-	public Account update_when_deposit(OperationRequest operationRequest) {
-		Account account = accountRepository.findOne(operationRequest.getAccountNumber());
-		 if(account == null)
+	public Account update(Account account) {
+		Account account_found = accountRepository.findOne(account.getAccountNumber());
+		 if(account_found == null)
 	            throw new AccountNotFoundException("Account Not Found");
-		 else if(operationRequest.getAmount() <= 0)
-			 throw new AmountNotValidException("Not Valid Amount ");
-
-		 account.setBalance(account.getBalance() + operationRequest.getAmount());
 
 	        return accountRepository.save(account);
 	    }
@@ -49,18 +45,5 @@ private AccountRepository accountRepository;
 	        return accountRepository.save(account);
 	    }
 
-
-	@Override
-	public Account update_when_withdraw(OperationRequest operationRequest) {
-		Account account = accountRepository.findOne(operationRequest.getAccountNumber());
-		 if(account == null)
-	            throw new AccountNotFoundException("Account Not Found");
-		 else if(operationRequest.getAmount() > account.getBalance() )
-			 throw new AmountNotValidException("Not Valid Amount ");
-		 
-		 account.setBalance(account.getBalance() - operationRequest.getAmount());
-
-	        return accountRepository.save(account);
-	    }
 
 }

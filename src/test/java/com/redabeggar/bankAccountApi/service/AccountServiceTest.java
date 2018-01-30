@@ -50,26 +50,18 @@ public class AccountServiceTest {
     }
 
     @Test
-    public void Should_Update_Account_When_Deposit() throws Exception {
+    public void Should_Update_Account() throws Exception {
         given(accountRepository.findOne(anyLong())).willReturn(account);
+        account.setBalance(account.getBalance() + operationRequest.getAmount());
         given(accountRepository.save(any(Account.class))).willReturn(account);
 
-        Account updated_account = accountService.update_when_deposit(operationRequest);
+        Account updated_account = accountService.update(account);
 
         assertThat(updated_account.getAccountNumber()).isEqualTo(12345);
         assertThat(updated_account.getBalance()).isEqualTo(2000);
     }
 
-    @Test
-    public void Should_Update_Account_When_Withdraw() throws Exception {
-        given(accountRepository.findOne(anyLong())).willReturn(account);
-        given(accountRepository.save(any(Account.class))).willReturn(account);
 
-        Account updated_account = accountService.update_when_withdraw(operationRequest);
-
-        assertThat(updated_account.getAccountNumber()).isEqualTo(12345);
-        assertThat(updated_account.getBalance()).isEqualTo(1000);
-    }
 
     @Test
     public void Should_Create_Account() throws Exception {
@@ -97,7 +89,7 @@ public class AccountServiceTest {
     @Test(expected = AccountNotFoundException.class)
     public void Should_Throw_Account_Not_Found_Exception_When_Updating_Account() throws Exception {
         given(accountRepository.findOne(anyLong())).willReturn(null);
-        Account saved_account = accountService.update_when_deposit(operationRequest);
+        Account saved_account = accountService.update(account);
     }
 
 

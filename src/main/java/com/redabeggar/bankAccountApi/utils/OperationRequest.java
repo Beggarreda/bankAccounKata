@@ -1,30 +1,19 @@
 package com.redabeggar.bankAccountApi.utils;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@RequiredArgsConstructor
 public class OperationRequest {
 
+	@NonNull
 	private Long accountNumber;
+	@NonNull
 	private double amount;
-	public OperationRequest() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	public OperationRequest(Long accountNumber, double amount) {
-		super();
-		this.accountNumber = accountNumber;
-		this.amount = amount;
-	}
-	public Long getAccountNumber() {
-		return accountNumber;
-	}
-	public double getAmount() {
-		return amount;
-	}
-	public void setAccountNumber(Long accountNumber) {
-		this.accountNumber = accountNumber;
-	}
-	public void setAmount(double amount) {
-		this.amount = amount;
-	}
 
 
 

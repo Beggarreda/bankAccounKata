@@ -6,8 +6,7 @@ import com.redabeggar.bankAccountApi.utils.OperationRequest;
 public interface IAccountService {
 
 	Account getByAccountNumber(long accountNumber);
-	Account update_when_deposit(OperationRequest operationRequest);
+	Account update(Account account);
     Account create(Account account);
-	Account update_when_withdraw(OperationRequest operationRequest);
 
 }

@@ -87,27 +87,30 @@ public class OperationServiceTest {
 	@Test
 	public void Should_Make_A_Deposit() throws Exception {
 
-		given(accountService.update_when_deposit(anyObject())).willReturn(account);
+		given(accountService.getByAccountNumber(anyLong())).willReturn(account);
+		account.setBalance(account.getBalance() + operationRequest.getAmount());
+		given(accountService.update(anyObject())).willReturn(account);
 		given(operationRepository.save(any(Operation.class))).willReturn(deposit_operation);
 
 		Operation operation = operationService.deposit(operationRequest);
 
 		Assertions.assertThat(operation.getAccount().getAccountNumber()).isEqualTo(12345);
-		Assertions.assertThat(operation.getAccount().getBalance()).isEqualTo(1200);
+		Assertions.assertThat(operation.getAccount().getBalance()).isEqualTo(2200);
 		Assertions.assertThat(operation.getAmount()).isEqualTo(500);
 		Assertions.assertThat(operation.getOperationType()).isEqualTo(OperationType.DEPOSIT);
 	}
 
 	@Test
 	public void Should_Make_A_Withdraw() throws Exception {
-
-		given(accountService.update_when_withdraw(anyObject())).willReturn(account2);
+		given(accountService.getByAccountNumber(anyLong())).willReturn(account2);
+		account2.setBalance(account2.getBalance() - operationRequest.getAmount());
+		given(accountService.update(anyObject())).willReturn(account2);
 		given(operationRepository.save(any(Operation.class))).willReturn(withdraw_operation);
 
 		Operation operation = operationService.withdraw(operationRequest);
 
 		Assertions.assertThat(operation.getAccount().getAccountNumber()).isEqualTo(6789);
-		Assertions.assertThat(operation.getAccount().getBalance()).isEqualTo(1800);
+		Assertions.assertThat(operation.getAccount().getBalance()).isEqualTo(800);
 		Assertions.assertThat(operation.getAmount()).isEqualTo(500);
 		Assertions.assertThat(operation.getOperationType()).isEqualTo(OperationType.WITHDRAW);
 	}
@@ -115,8 +118,8 @@ public class OperationServiceTest {
 	@Test
 	public void Should_Make_A_Transfer() throws Exception {
 
-		given(accountService.update_when_withdraw(anyObject())).willReturn(account);
-		given(accountService.update_when_deposit(anyObject())).willReturn(account2);
+		given(accountService.getByAccountNumber(account.getAccountNumber())).willReturn(account);
+		given(accountService.getByAccountNumber(account2.getAccountNumber())).willReturn(account2);
 		given(operationRepository.save(any(Operation.class))).willReturn(transfer_operation);
 
 		Operation operation = operationService.transfer(transferRequest);
@@ -124,8 +127,8 @@ public class OperationServiceTest {
 		Assertions.assertThat(operation.getAccount().getAccountNumber()).isEqualTo(12345);
 		Assertions.assertThat(operation.getPayee().getAccountNumber()).isEqualTo(6789);
 		Assertions.assertThat(operation.getAmount()).isEqualTo(800);
-		Assertions.assertThat(operation.getAccount().getBalance()).isEqualTo(1200);
-		Assertions.assertThat(operation.getPayee().getBalance()).isEqualTo(1800);
+		Assertions.assertThat(operation.getAccount().getBalance()).isEqualTo(400);
+		Assertions.assertThat(operation.getPayee().getBalance()).isEqualTo(2600);
 		Assertions.assertThat(operation.getOperationType()).isEqualTo(OperationType.TRANSFERT);
 	}
 
@@ -147,7 +150,7 @@ public class OperationServiceTest {
 
 	@Test(expected = AccountNotFoundException.class)
 	public void Should_Throw_Account_Not_Found_Exception_When_Making_Deposit() throws Exception {
-		given(accountService.update_when_deposit(anyObject())).willThrow(new AccountNotFoundException("Error making a Deposit : Account Not Found"));
+		given(accountService.getByAccountNumber(anyLong())).willThrow(new AccountNotFoundException("Error making a Deposit : Account Not Found"));
 
 		Operation operation = operationService.deposit(operationRequest);
 
@@ -155,8 +158,8 @@ public class OperationServiceTest {
 
 	@Test(expected = AmountNotValidException.class)
 	public void Should_Throw_Amount_Not_Valid_Exception_When_Making_Deposit() throws Exception {
-		given(accountService.update_when_deposit(anyObject())).willThrow(new AmountNotValidException("Error making a Deposit : Amount Not Valid"));
-
+		given(accountService.getByAccountNumber(anyLong())).willReturn(account);
+        operationRequest.setAmount(-100);
 		Operation operation = operationService.deposit(operationRequest);
 
 	}

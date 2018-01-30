@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.redabeggar.bankAccountApi.exception.AccountNotFoundException;
+import com.redabeggar.bankAccountApi.exception.AmountNotValidException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,7 @@ import com.redabeggar.bankAccountApi.utils.OperationType;
 import com.redabeggar.bankAccountApi.utils.TransferRequest;
 
 @Service
+@Slf4j
 public class OperationService implements IOperationService {
 
 	@Autowired
@@ -26,8 +30,12 @@ public class OperationService implements IOperationService {
 	@Override
 	public Operation deposit(OperationRequest operationRequest) {
 
+        Account account = accountService.getByAccountNumber(operationRequest.getAccountNumber());
+		if(operationRequest.getAmount() <= 0)
+			throw new AmountNotValidException("Not Valid Amount ");
 
-		Account account = accountService.update_when_deposit(operationRequest);
+		account.setBalance(account.getBalance() + operationRequest.getAmount());
+		account = accountService.update(account);
 		Operation operation = new Operation(account, operationRequest.getAmount(), OperationType.DEPOSIT);
 		operationRepository.save(operation);
 		
@@ -37,7 +45,14 @@ public class OperationService implements IOperationService {
 
 	@Override
 	public Operation withdraw(OperationRequest operationRequest) {
-		Account account = accountService.update_when_withdraw(operationRequest);
+		Account account = accountService.getByAccountNumber(operationRequest.getAccountNumber());
+		if(account == null)
+			throw new AccountNotFoundException("Account Not Found");
+		else if(operationRequest.getAmount() > account.getBalance() )
+			throw new AmountNotValidException("Not Valid Amount ");
+
+		account.setBalance(account.getBalance() - operationRequest.getAmount());
+		account = accountService.update(account);
 		Operation operation = new Operation(account, operationRequest.getAmount(), OperationType.WITHDRAW);
 		operationRepository.save(operation);
 		
@@ -47,9 +62,22 @@ public class OperationService implements IOperationService {
 
 	@Override
 	public Operation transfer(TransferRequest transferRequest) {
-		OperationRequest payeeRequest = new OperationRequest(transferRequest.getPayeeAccountNumber(), transferRequest.getAmount());;
-		Account account = accountService.update_when_withdraw(transferRequest);
-		Account account2 = accountService.update_when_deposit(payeeRequest);
+		log.info(" transfer request main account : "+ transferRequest.getAccountNumber());
+		log.info(" transfer request payee account : "+ transferRequest.getPayeeAccountNumber());
+		OperationRequest payeeRequest = new OperationRequest(transferRequest.getPayeeAccountNumber(), transferRequest.getAmount());
+		Account account = accountService.getByAccountNumber(transferRequest.getAccountNumber());
+		if(transferRequest.getAmount() > account.getBalance() )
+			throw new AmountNotValidException("Not Valid Amount ");
+		account.setBalance(account.getBalance() - transferRequest.getAmount());
+
+
+		Account account2 = accountService.getByAccountNumber(payeeRequest.getAccountNumber());
+		 if(transferRequest.getAmount() <= 0)
+			throw new AmountNotValidException("Not Valid Amount ");
+		account2.setBalance(account2.getBalance() + transferRequest.getAmount());
+
+		log.info(" transfer request main account : "+ account.getAccountNumber());
+		log.info(" transfer request payee account : "+ account2.getAccountNumber());
 		Operation operation = new Operation(account, account2,transferRequest.getAmount(), OperationType.TRANSFERT);
 		operationRepository.save(operation);
 		

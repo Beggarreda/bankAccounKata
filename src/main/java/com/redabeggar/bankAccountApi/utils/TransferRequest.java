@@ -1,15 +1,15 @@
 package com.redabeggar.bankAccountApi.utils;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
 public class TransferRequest extends OperationRequest{
 
 	private Long payeeAccountNumber ;
 
 
-
-	public TransferRequest() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 
 	public TransferRequest(Long accountNumber, double amount) {
 		super(accountNumber, amount);
@@ -21,14 +21,6 @@ public class TransferRequest extends OperationRequest{
 		this.payeeAccountNumber = payeeAccountNumber;
 	}
 
-	public Long getPayeeAccountNumber() {
-		return payeeAccountNumber;
-	}
-
-	public void setPayeeAccountNumber(Long payeeAccountNumber) {
-		this.payeeAccountNumber = payeeAccountNumber;
-	}
-	
 
 	
 }
